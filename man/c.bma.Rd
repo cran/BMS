@@ -1,0 +1,68 @@
+\name{c.bma}
+\alias{combine_chains}
+\alias{c.bma}
+%- Also NEED an '\alias' for EACH other topic documented here.
+\title{ Concatenate bma objects }
+\description{
+  Combines bma objects (resulting from \code{\link{bms}}). Can be used to split estimation over several machines, or combine the MCMC resultls obtained from different starting points.
+}
+\usage{
+combine_chains(...)
+
+ \method{c}{bma}(..., recursive = FALSE)
+}
+%- maybe also 'usage' for other objects documented here.
+\arguments{
+  \item{\dots}{ At least two 'bma' objects (cf. \code{\link{bms}}) }
+  \item{recursive}{ retained for compatibility with \code{\link{c}} method }
+}
+\details{
+  Aggregates the information obtained from several chains. The result is a 'bma' object (cf. 'Values' in \code{\link{bms}}) that can be used just as a standard 'bma' object.\cr
+  Note that \code{combine_chains} helps in particular to paralllelize the enumeration of the total model space:
+  A model with \eqn{K} regressors has \eqn{2^K} potential covariate combinations: With \eqn{K} large (more than 25), this can be pretty time intensive.
+  With the \code{\link{bms}} arguments \code{start.value} and \code{iter}, sampling can be done in steps: cf. example 'enumeration' below.
+}
+
+\author{ Martin Feldkircher and Stefan Zeugner }
+\seealso{ \code{\link{bms}} for creating bma objects 
+
+Check \url{http://bms.zeugner.eu} for additional help.}
+\examples{
+ data(datafls)
+  
+ #MCMC case ############################
+ model1=bms(datafls,burn=1000,iter=4000,mcmc="bd",start.value=c(20,30,35))
+ model2=bms(datafls,burn=1500,iter=7000,mcmc="bd",start.value=c(1,10,15))
+ 
+ model_all=c(model1,model2)
+ coef(model_all)
+ plot(model_all)
+ 
+ 
+ 
+ #splitting enumeration ########################
+ 
+ #standard case with 12 covariates (4096 differnt combinations):
+ enum0=bms(datafls[,1:13],mcmc="enumerate")
+ 
+ # now split the task:
+ # enum1 does everything from model zero (the first model) to model 1999
+ enum1=bms(datafls[,1:13],mcmc="enumerate",start.value=0,iter=1999)
+ 
+ # enum2 does models from index 2000 to the index 3000 (in total 1001 models)
+ enum2=bms(datafls[,1:13],mcmc="enumerate",start.value=2000,iter=1000)
+ 
+ # enum3 does models from index 3001 to the end
+ enum3=bms(datafls[,1:13],mcmc="enumerate",start.value=3001)
+ 
+ enum_combi=c(enum1,enum2,enum3)
+ coef(enum_combi)
+ coef(enum0)
+ #both enum_combi and enum0 have exactly the same results 
+ #(one difference: enum_combi has more 'top models' (1500 instead of 500))
+
+}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
+\keyword{models}
+%\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

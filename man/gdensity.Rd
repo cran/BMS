@@ -1,0 +1,82 @@
+\name{gdensity}
+\alias{gdensity}
+%- Also NEED an '\alias' for EACH other topic documented here.
+\title{ Posterior Density of the Shrinkage Factor }
+\description{
+ Calculates the mixture marginal posterior density for the shrinkage factor (g/(1+g)) from a BMA object under the hyper-g prior and plots it 
+}
+\usage{
+  gdensity(x, n = 512, plot = TRUE, addons = "zles", addons.lwd = 1.5, ...)
+}
+%- maybe also 'usage' for other objects documented here.
+\arguments{
+  \item{x}{ A bma object (see \code{\link{bms}}). }
+  \item{n}{ The integer number of equally spaced points at which the density is to be estimated. see 'Details' below}
+  \item{addons}{ character, defaulting to \code{"zles"}. Specifies which additional information should be added to the plot via low-level commands (see 'Details' below). }
+  \item{plot}{ logical.  If \code{TRUE} (default), the density is plotted; if \code{FALSE} then \code{gdensity} only returns the estimated posterior density without plotting. }
+  \item{addons.lwd}{ scalar, default 1.5. Line width to be used for the low-level plotting commands specified by \code{addons}. Cf. argument \code{lwd} in \code{\link{par}}}
+  \item{\dots}{ Additional arguments for \code{\link{plot.default}} with sensible defaults}
+}
+\details{
+  The function \code{gdensity} estimates and plots the posterior density for the shrinkage factor \eqn{g/(1+g)}\cr
+  This is evidently only possible if the shrinkage factor if not fixed, i.e. if the bma object \code{x} was estimated with a hyper-g prior - cf. argument \code{g} in  \code{\link{bms}}\cr
+  The density is based only on the best models retained in the bma object \code{x}, cf. argument \code{nmodel} in \code{\link{bms}}\cr
+  A note on argument \code{n}: The points at which the density is estimated start at \eqn{max(0,E-5*SD)}, where \eqn{E} and \eqn{SD} are the expected value and standard deviation of the shrinkage factor, respectively. For plotting the entire domain \eqn{(0,1)} use \code{xlim=c(0,1)} as an argument for \code{gdensity}.
+
+
+  The argument \code{addons} specifies what additional information should be added to the plot(s) via the low-level commands \code{\link{lines}} and \code{\link{legend}}:\cr
+  \code{"e"} for the posterior expected value (EV) of the shrinkage factor,\cr
+  \code{"s"} for 2 times posterior standard deviation (SD) bounds,\cr
+  \code{"m"} for the posterior median,\cr
+  \code{"f"} for posterior expected values of the individual models whom the density is averaged over,\cr
+  \code{"z"} for a zero line, \code{"l"} for including a \code{\link{legend}}\cr
+  The following two are only possible if the bma object collected statistics on shrinkage, cf. argument \code{g.stats} in \code{\link{bms}}
+  \code{"E"} for posterior expected value under MCMC frequencies (see argument \code{exact} in \code{\link{coef.bma}}),\cr
+  \code{"S"} for the corresponding 2 times standard deviation bounds (MCMC),\cr
+   
+  Any combination of these letters will give the desired result. Use \code{addons=""} for not using any of these.
+  
+  
+}
+\value{
+  \code{gdensity} returns an object of the class \code{\link{density}} detailing the posterior mixture density of the shrinkage factor. 
+  
+}
+%\references{ ~put references to the literature/web site here ~ }
+\author{ Martin Feldkircher and Stefan Zeugner }
+\note{ 
+  The computed marginal posterior density is a Bayesian Model Averaging mixture of the marginal posterior densities of the shrinkage factor under individual models. 
+  The accuracy of the result therefore depends on the number of 'best' models contained in \code{x} (cf. argument \code{nmodel} in \code{\link{bms}}).
+  
+  Correspondingly, the posterior EV and SD specified by \code{addons="es"} are based on 'best' model likelihoods ('exact') and are conditional on inclusion.
+  
+  The low-level commands enacted by the argument \code{addons} rely on colors of the \code{\link{palette}}: color 2 for \code{"e"} and \code{"s"}, color 3 for \code{"m"}, color 8 for \code{"f"}, color 4 for \code{"E"} and \code{"S"}. The default colors may be changed by a call to \code{\link{palette}}.
+}
+\seealso{ \code{\link{density.bma}} for computing coefficient densities, \code{\link{bms}} for creating bma objects, \code{\link{density}} for the general method 
+
+Check \url{http://bms.zeugner.eu} for additional help.}
+\examples{
+
+ data(datafls)
+ mm=bms(datafls,g="hyper=UIP")
+
+ gdensity(mm) # default plotting
+ 
+ # the grey bars represent expected shrinkage factors of the individual models
+ gdensity(mm,addons="lzfes") 
+ 
+ gdensity(mm,addons="zSEm",addons.lwd=2) #plotting the median 'm' and the posterior mean and bounds based on MCMC results
+
+# plot the posterior shrinkage density only for the very best model
+ gdensity(mm[1],addons="esz")
+
+
+#using the calculated density for other purposes...
+ dd=gdensity(mm,plot=FALSE)
+ plot(dd) 
+
+}
+% Add one or more standard keywords, see file 'KEYWORDS' in the
+% R documentation directory.
+\keyword{aplot}
+\keyword{utilities}

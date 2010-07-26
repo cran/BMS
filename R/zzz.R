@@ -1,0 +1,3 @@
+setClass("topmod",representation(addmodel="function", lik="function", bool="function", ncount="function", nbmodels="function", nregs="function", betas_raw="function", betas2_raw="function", kvec_raw="function", bool_binary="function", betas="function", betas2="function", fixed_vector="function"))
+setClass("bma",representation(info="list",arguments="list",topmod="topmod",start.pos="integer",gprior.info="list",mprior.info="list",X.data="data.frame",reg.names="character",bms.call="call"))
+setClass("zlm",representation(coefficients="numeric",residuals="numeric",rank="numeric",fitted.values="numeric",df.residual="numeric",call="call",terms="formula",model="data.frame",coef2moments="numeric",marg.lik="numeric",gprior.info="list"))
