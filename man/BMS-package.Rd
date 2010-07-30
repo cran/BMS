@@ -3,7 +3,7 @@
 \alias{BMS}
 \docType{package}
 \title{
-  Bayesian Model Sampling 0.2.4
+  Bayesian Model Sampling 0.2.5
 }
 \description{
 This package enables Bayesian Model Averaging over the classical normal-conjugate model with many prior options and posterior statistics.
@@ -12,8 +12,8 @@ This package enables Bayesian Model Averaging over the classical normal-conjugat
 \tabular{ll}{
 Package: \tab BMS\cr
 Type: \tab Package\cr
-Version: \tab 0.2.4\cr
-Date: \tab 2010-07-26\cr
+Version: \tab 0.2.5\cr
+Date: \tab 2010-07-30\cr
 License: \tab Artistic 2.0\cr
 }
 The most important function is \code{\link{bms}} to perform bayesian model sampling.\cr

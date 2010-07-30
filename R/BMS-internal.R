@@ -1146,7 +1146,7 @@ function (nmaxregressors = 10, nbmodels = 10, bbeta = FALSE,
                     lbetas[[modidx]] <<- vbeta
                   }
                   if (bbeta2) {
-                    lbetas2[[modidx]] <<- vbeta
+                    lbetas2[[modidx]] <<- vbeta2
                   }
                 } else {
                   modidx <<- seq_nbmodel[ix_of_mybool]

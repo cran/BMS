@@ -332,7 +332,7 @@ Here, the \verb+addons+ argument assigns the vertical bars to be drawn: the expe
 Nonetheless, even though \verb+fls_hyper+ and \verb+fls_combi+ applied very different $g$ and model priors, the results for the \verb+Muslim+ covariate are broadly similar: It is unanimously positive, with a conditional expected value somewhat above $0.01$.
 
 \addcontentsline{toc}{section}{References}
-\bibliography{bma}
+\bibliography{bmasmall}
 
 %\bibliography{C:/Programme/LatexLibs/bma}
 \bibliographystyle{apalike}
