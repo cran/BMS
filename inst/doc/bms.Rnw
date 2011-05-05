@@ -1,5 +1,6 @@
 \documentclass[a4paper]{article}
-\title{Bayesian Model Averaging with BMS}
+\title{Bayesian Model Averaging with BMS\\ 
+\normalsize{for BMS Version 0.3.0}}
 \author{Stefan Zeugner}
 \usepackage{natbib}
 \usepackage{vmargin}
@@ -7,9 +8,8 @@
 % \VignetteIndexEntry{Bayesian Model Averaging with BMS}
 \begin{document}
 \maketitle
-\abstract{This manual is a brief introduction to applied Bayesian Model Averaging with the R package \verb+BMS+. The manual is structured as a hands-on tutorial for readers with few experience in BMA. Readers with more BMA background are advised to consult the table of contents in order to lookup formal representations of the concepts used in BMS.\\
-For more information on the BMS package, please refer to \\
-\texttt{http://bms.zeugner.eu}.}
+\abstract{This manual is a brief introduction to applied Bayesian Model Averaging with the R package \verb+BMS+. The manual is structured as a hands-on tutorial for readers with few experience with BMA. Readers from a more technical background are advised to consult the table of contents for formal representations of the concepts used in BMS.\\
+For other tutorials and more information, please refer to \mbox{ \texttt{http://bms.zeugner.eu}.} }
 \tableofcontents
 \clearpage
 
@@ -18,7 +18,7 @@ options(width=75)
 @
 
 \section{A Brief Introduction to Bayesian Model Averaging}
-This section reiterates some basic concepts of BMA, and introduces some notation for readers with limited knowledge of BMA. Readers with more experience in BMA should skip this chapter and directly go to section \ref{sec:example}. For a more thorough introduction to BMA, consult \citet{Hoetingetal99}.
+This section reiterates some basic concepts, and introduces some notation for readers with limited knowledge of BMA. Readers with more experience in BMA should skip this chapter and directly go to section \ref{sec:example}. For a more thorough introduction to BMA, consult \citet{Hoetingetal99}.
 \subsection{Bayesian Model Averaging}
 Bayesian Model Averaging (BMA) addresses model uncertainty in a canonical regression problem. Suppose a linear model structure, with $y$ being the dependent variable, $\alpha_\gamma$ a constant, $\beta_\gamma$ the coefficients, and $\varepsilon$ a normal IID error term with variance $\sigma^2$:
 \begin{equation}
@@ -26,35 +26,33 @@ Bayesian Model Averaging (BMA) addresses model uncertainty in a canonical regres
 	\label{eq:lm}
 \end{equation} 
 
-A problem arises when there are many potential explanatory variables $X$: Which variables $X_\gamma \in \{X\}$ should be then included in the model? And how important are they? The direct approach to do inference on a single linear model that includes all variables is inefficient or even infeasible with a limited number of observations. 
+A problem arises when there are many potential explanatory variables in a matrix $X$: Which variables $X_\gamma \in \{X\}$ should be then included in the model? And how important are they? The direct approach to do inference on a single linear model that includes all variables is inefficient or even infeasible with a limited number of observations. 
 
-BMA tackles the problem by estimating models for all possible combinations of $X$; its results are a weighted average over all of them. If $X$ contains $K$ potential variables, this means estimating $2^K$ variable combinations and thus $2^K$ models. The model weights for this averaging stem from posterior model probabilities that arise from Bayes' theorem:
+BMA tackles the problem by estimating models for all possible combinations of $\{X\}$ and constructing a weighted average over all of them. If $X$ contains $K$ potential variables, this means estimating $2^K$ variable combinations and thus $2^K$ models. The model weights for this averaging stem from posterior model probabilities that arise from Bayes' theorem:
 \begin{equation}
- p(M_\gamma | y, X) \; = \; \frac{p(y |M_\gamma, y,X) p(M_\gamma)}{p(y|X)} \; \propto p(y |M_\gamma, y, X) p(M_\gamma)	
+ p(M_\gamma | y, X) \; = \; \frac{p(y |M_\gamma, X) p(M_\gamma)}{p(y|X)} \;  = \frac{p(y |M_\gamma, X) p(M_\gamma)	}{\sum_{s=1}^{2^K} p(y| M_s, X) p(M_s)} 
 	\label{eq:bf}
 \end{equation}
 
-Here, $p(y|X)$ denotes the \emph{integrated} likelihood which is constant over all models and is thus simply a multiplicative term. Therefore, the posterior model probability (PMP) is proportional (embodied by the sign $\propto$) to the marginal likelihood of the model $p(y |M_\gamma, y, X) $ (the probability of the data given the model $M_\gamma$) times a prior model probability $p(M)$ -- that is, how probable the researcher thinks model $M_\gamma$ before looking at the data. By renormalization of the this product one can infer the PMPs and thus the model weighted posterior distribution for any statistic $\theta$ (e.g. the coefficients $\beta$):
-$$ p(\theta| y, X) = \sum_{\gamma=1}^{2^K } p(\theta | M_\gamma,  y, X) \frac{p(M_\gamma| X, y) p(M_\gamma)}{\sum_{s=1}^{2^K} p(M_s|y,X) p(M_s)} $$
+Here, $p(y|X)$ denotes the \emph{integrated} likelihood which is constant over all models and is thus simply a multiplicative term. Therefore, the posterior model probability (PMP) $p(M_\gamma|y,X)$ is proportional to\footnote{ Proportionality is expressed with the sign $\propto$: i.e. $p(M_\gamma | y, X) \; \propto \; p(y |M_\gamma, X) p(M_\gamma)$ } the marginal likelihood of the model $p(y |M_\gamma, X) $ (the probability of the data given the model $M_\gamma$) times a prior model probability $p(M_\gamma)$ -- that is, how probable the researcher thinks model $M_\gamma$ before looking at the data. Renormalization then leads to the PMPs and thus the model weighted posterior distribution for any statistic $\theta$ (e.g. the coefficients $\beta$):
+$$ p(\theta| y, X) = \sum_{\gamma=1}^{2^K } p(\theta | M_\gamma,  y, X) p(M_\gamma| X, y) $$
 The model prior $p(M_\gamma)$ has to be elicited by the researcher and should reflect prior beliefs. A popular choice is to set a uniform prior probability for each model $p(M_\gamma) \propto 1$ to represent the lack of prior knowledge. Further model prior options will be explored in section \ref{sec:mpriors}.
 
 \subsection{Bayesian Linear Models and Zellner's $g$ prior}\label{ssec:zg}
-The specific expressions for marginal likelihoods $p(M_\gamma|y,X)$ and posterior distributions $p(\theta | M_\gamma, y, X)$ depend on the estimation framework chosen. The literature standard is to use a Bayesian normal-conjugate linear model with a specific prior structure called 'Zellner's g prior' as will be outlined below:\\
+The specific expressions for marginal likelihoods $p(M_\gamma|y,X)$ and posterior distributions $p(\theta | M_\gamma, y, X)$ depend on the chosen estimation framework. The literature standard is to use a 'Bayesian regression' linear model with a specific prior structure called 'Zellner's g prior' as will be outlined in this section.\footnote{Note that the presented framework is very similar to the natural normal-gamma-conjugate model - which employs proper priors for $\alpha$ and $\sigma$. Nonetheless, the resulting posterior statistics are virtually identical.}\\
 For each individual model $M_\gamma$ suppose a normal error structure as in (\ref{eq:lm}). The need to obtain posterior distributions requires to specify the priors on the model parameters. Here, we place 'improper' priors on the constant and error variance, which means they are evenly distributed over their domain: $p(\alpha_\gamma) \propto 1$, i.e. complete prior uncertainty where the prior is located. Similarly, set $p(\sigma) \propto \sigma^{-1}$.
 
-The crucial prior is the one on regression coefficients $\beta_\gamma$: Before looking into the data $(y,X)$, coefficients are assumed to follow a normal distribution with a specified mean and variance. It is common to assume a conservative prior mean of zero for the coefficients to reflect that not much is known about them. Their variance structure is defined according to Zellner's g: $\sigma^2 ( \frac{1}{g} X_\gamma'X_\gamma )^{-1}$:
+The crucial prior is the one on regression coefficients $\beta_\gamma$: Before looking into the data $(y,X)$, the researcher formulates her prior beliefs on coefficients into a normal distribution with a specified mean and variance. It is common to assume a conservative prior mean of zero for the coefficients to reflect that not much is known about them. Their variance structure is defined according to Zellner's g: $\sigma^2 ( \frac{1}{g} X_\gamma'X_\gamma )^{-1}$:
 $$ \beta_\gamma | g \sim N \left( 0,\sigma^2 \left( \frac{1}{g} X_\gamma'X_\gamma \right)^{-1}\right) $$
-This means that the researcher thinks coefficients are zero, and that their variance-covariance structure is broadly in line with that of the data $X_\gamma$. The hyperparameter $g$ embodies how certain the researcher is that coefficients are zero: A small $g$ means few prior coefficient variance and therefore implies the researcher is quite certain (or conservative) that the coefficients are indeed zero. In contrast, a large $g$ means that the researcher is very uncertain that coefficients are zero. 
+This means that the researcher thinks coefficients are zero, and that their variance-covariance structure is broadly in line with that of the data $X_\gamma$. The hyperparameter $g$ embodies how certain the researcher is that coefficients are indeed zero: A small $g$ means few prior coefficient variance and therefore implies the researcher is quite certain (or conservative) that the coefficients are indeed zero. In contrast, a large $g$ means that the researcher is very uncertain that coefficients are zero. 
 
 The posterior distribution of coefficients reflects prior uncertainty: Given $g$, it follows a t-distribution with expected value $E(\beta_\gamma|y,X,g,M_\gamma) = \frac{g}{1+g} \hat{\beta}_\gamma$, where $\hat{\beta}_\gamma$ is the standard OLS estimator for model $\gamma$. The expected value of coefficients is thus a convex combination of OLS estimator and prior mean (zero). The more conservative (smaller) $g$, the more important is the prior, and the more the expected value of coefficients is shrunk toward the prior mean zero. As $g \rightarrow \infty$, the coefficient estimator approaches the OLS estimator. Similarly, the posterior variance of $\beta_\gamma$ is affected by the choice of $g$:\footnote{here, $N$ denotes sample size, and $\bar{y}$ the sample mean of the response variable}
-$$ Cov(\beta_\gamma|y,X,g,M_\gamma) = \frac{(y-\bar{y})'(y-\bar{y})}{N-2} \frac{g}{1+g} \left(1-\frac{g}{1+g} R_\gamma^2\right) (X_\gamma'X_\gamma)^{-1} $$
-I.e. the posterior covariance is similar to that of the OLS estimator, times a factor that includes $g$ and $R^2_\gamma$, the OLS R-squared for model $\gamma$.
+$$ Cov(\beta_\gamma|y,X,g,M_\gamma) = \frac{(y-\bar{y})'(y-\bar{y})}{N-3} \frac{g}{1+g} \left(1-\frac{g}{1+g} R_\gamma^2\right) (X_\gamma'X_\gamma)^{-1} $$
+I.e. the posterior covariance is similar to that of the OLS estimator, times a factor that includes $g$ and $R^2_\gamma$, the OLS R-squared for model $\gamma$. The appendix shows how to apply the function \texttt{zlm} in order to estimate such models out of the BMA context.
 
-Finally, the marginal likelihood $p(y|M_\gamma,X,g)$ is related to the R-squared and includes a size penalty factor that adjusts for model size $k_\gamma$:
+For BMA, this prior framwork results into a very simple marginal likelihood $p(y|M_\gamma,X,g)$, that is related to the R-squared and includes a size penalty factor adjusting for model size $k_\gamma$:
 $$ p(y|M_\gamma,X,g) \propto (y-\bar{y})'(y-\bar{y})^{-\frac{N-1}{2} } (1+g)^{-\frac{k_\gamma}{2}} \left( 1- \frac{g}{1+g} \right)^{-\frac{N-1}{2}} $$
-The crucial choice to take here is the form of the hyperparameter $g$. The standard framework is to set $g$ to a fixed value that is common to all models. A popular 'default' specification is the 'unit information prior' (UIP), which sets $g=N$ and thus attributes about the same information to the prior as is contained in one observation.
-
-The Bayesian normal-conjugate model with Zellner's $g$ prior is the workhorse model for BMA, but may also be used as a single model (i.e. without taking model uncertainty into account). Section \ref{ssec:zlm} in the appendix demonstrates the use of the function \verb+zlm+ to estimate such a single model. 
+The crucial choice here concerns the form of the hyperparameter $g$. A popular 'default' approach is the 'unit information prior' (UIP), which sets $g=N$ commonly for all models and thus attributes about the same information to the prior as is contained in one observation. (Please refer to section \ref{sec:gprior} for a discussion of other $g$-priors.)\footnote{Note that BMS is, in principle not restricted to Zellner's $g$-priors, as quite different coefficient priors might be defined by R-savy users.}
 
 
 \section{A BMA Example: Attitude Data}\label{sec:example}
@@ -81,9 +79,9 @@ The coefficient results can be obtained via
 <<>>=
 coef(att)
 @
-The above matrix shows the variable names and corresponding statistics: The second column \verb+Post Mean+ displays the coefficients averaged over all models, including the models wherein the variable was not contained (implying that the coefficient is zero in this case). The covariate \verb+complaints+ has a comparatively large coefficient and seems to be most important. The importance of the variables in explaining the data is given in the first column \verb+PIP+ which represents posterior inclusion probabilities - i.e. the sum of PMPs for all models wherein a covariate was included. We see that with $99.9\%$, virtually all of posterior model mass rests on models that include \verb+complaints+. In contrast, \verb+learning+ has an intermediate PIP of $40.6\%$, while the other covariates do not seem to matter much. Consequently their (unconditional) coefficients are quite low, since the results quite often include models where these coefficients are zero. 
+The above matrix shows the variable names and corresponding statistics: The second column \verb+Post Mean+ displays the coefficients averaged over all models, including the models wherein the variable was not contained (implying that the coefficient is zero in this case). The covariate \verb+complaints+ has a comparatively large coefficient and seems to be most important. The importance of the variables in explaining the data is given in the first column \verb+PIP+ which represents posterior inclusion probabilities - i.e. the sum of PMPs for all models wherein a covariate was included. We see that with $99.9\%$, virtually all of posterior model mass rests on models that include \verb+complaints+. In contrast, \verb+learning+ has an intermediate PIP of $40.6\%$, while the other covariates do not seem to matter much. Consequently their (unconditional) coefficients\footnote{Unconditional coefficients are defined as $E(\beta|y,X)=\sum_{\gamma=1}^{2^K} p(\beta_\gamma|, y,X, M_\gamma) p(M_\gamma|y,X)$ i.e. a weighted average over all models, including those where this particular coeffiecnt was restricted to zero. A conditional coeffienct in contrast, is 'conditional on inclusion', i.e. a weighted average only over those models where its regressor was included. Conditional coefficeints may be obtained with the command \mbox{\texttt{coef(att, condi.coef =TRUE)}}.} are quite low, since the results quite often include models where these coefficients are zero. 
 
-The coefficients' posterior standard deviations (\verb+Post SD+) reflect further evidence: \verb+complaints+ is certainly positive, while \verb+advance+ is most likely negative. In fact, the coefficient sign can also be inferred from the fourth column \verb+Cond.Pos.Sign+, the 'posterior probability of a positive coefficient expected value conditional on inclusion'. Here, we see that in all encountered models containing this variables, the (expected values of) coefficients for \verb+complaints+ and \verb+learning+ were positive. In contrast, the corresponding number for \verb+privileges+ is near to zero, i.e. in virtually all models that include \verb+privileges+, its coefficient sign is negative. Finally, the last column \verb+idx+ denotes the index of the variables' appearance in the original data set, as our results are obviously sorted by PIP. 
+The coefficients' posterior standard deviations (\verb+Post SD+) reflect further evidence: \verb+complaints+ is certainly positive, while \verb+advance+ is most likely negative. In fact, the coefficient sign can also be inferred from the fourth column \verb+Cond.Pos.Sign+, the 'posterior probability of a positive coefficient expected value conditional on inclusion', respectively 'sign certainty'. Here, we see that in all encountered models containing this variables, the (expected values of) coefficients for \verb+complaints+ and \verb+learning+ were positive. In contrast, the corresponding number for \verb+privileges+ is near to zero, i.e. in virtually all models that include \verb+privileges+, its coefficient sign is negative. Finally, the last column \verb+idx+ denotes the index of the variables' appearance in the original data set, as our results are obviously sorted by PIP. 
 
 Further inferring about the importance of our variables, it might be really more interesting to look at their standardized coefficients.\footnote{Standardized coefficients arise if both the response $y$ and the regressors $X$ are normalized to mean zero and variance one -- thus effectively bringing the data down to same order of magnitude.} Type:
 <<>>=
@@ -102,7 +100,7 @@ Finally, let's look into which models actually perform best: The function \verb+
 <<>>=
 topmodels.bma(att)[,1:3]
 @
-\label{topmodcall}We see that the best model, with 29\% posterior model probability,\footnote{The differentiation between \texttt{PMP (Exact)} and \texttt{PMP (MCMC)} is of importance if an MCMC sampler was used -- cf. section \ref{ssec:anavsmcmc} } is the one that only includes \verb+complaints+. However the second best model includes \verb+learning+ in addition and has a PMP of 16\%. Use the command \verb+beta.draws.bma(att)+ to obtain the actual (expected values of) posterior coefficient estimates for each of these models.
+\label{topmodcall}We see that the output also includes the posterior model probability for each model.\footnote{To access the PMP for any model, consider the function \texttt{pmpmodel} -- cf. \texttt{help(pmpmodel)} . } The best model, with 29\% posterior model probability,\footnote{The differentiation between \texttt{PMP (Exact)} and \texttt{PMP (MCMC)} is of importance if an MCMC sampler was used -- cf. section \ref{ssec:anavsmcmc} } is the one that only includes \verb+complaints+. However the second best model includes \verb+learning+ in addition and has a PMP of 16\%. Use the command \verb+beta.draws.bma(att)+ to obtain the actual (expected values of) posterior coefficient estimates for each of these models.
 
 In order to get a more comprehensive overview over the models, use the command
 <<fig=TRUE>>=
@@ -113,7 +111,7 @@ Here, blue color corresponds to a positive coefficient, red to a negative coeffi
 
 
 \section{Model Size and Model Priors}\label{sec:mpriors}
-Invoking the command \verb+summary(att)+ yielded the important posterior statistic \verb+Mean no. regressors+, the posterior expected value of model size which in our case was $2.11$. Note that the posterior expected model size is equal to the sum of PIPs -- verify via
+Invoking the command \verb+summary(att)+ yielded the important posterior statistic \verb+Mean no. regressors+, the posterior expected model size (i.e. the average number of included regressors), which in our case was $2.11$. Note that the posterior expected model size is equal to the sum of PIPs -- verify via
 <<>>=
 sum(coef(att)[,1])
 @
@@ -123,7 +121,7 @@ This value contrasts with the prior expected model size implictely used in our m
 plotModelsize(att)
 @
 
-We see that while the model prior implies a symmetric distribution around $K/2=3$, updating with the data points to somewhat smaller models.
+We see that while the model prior implies a symmetric distribution around $K/2=3$, updating it with the data yields a posterior that puts more importance on parsimonious models.
 
 In order to illustrate the impact of the uniform model prior assumption, we might consider other popular model priors that allow more freedom in choosing prior expected model size and other factors.
 \subsection{Binomial Model Prior}
@@ -136,12 +134,12 @@ att_fixed = bms(attitude, mprior="fixed", mprior.size=2, user.int=T)
 @
 As seen in \verb+Mean no. regressors+, the posterior model size is now $1.61$ which is somewhat smaller than with uniform model priors. Since posterior model size equals the sum of PIPs, many of them have also become smaller than under \verb+att+ But interestingly, the PIP of \verb+complaints+ has remained at near 100\%.
 
-\subsection{Custom Model Priors}
+\subsection{Custom Prior Inclusion Probabilities}
 In view of the pervasive impact of \verb+complaints+, one might wonder whether its importance would also remain robust to a greatly unfair prior. For instance, one could define a prior inclusion probability of only $\theta=0.01$ for the \verb+complaints+ while setting a 'standard' prior inclusion probability of $\theta=0.5$ for all other variables. Such a prior might be submitted to \verb+bms+ by assigning a vector of prior inclusion probabilities via its \verb+mprior.size+ argument:\footnote{This implies a prior model size of $\bar{m}= 0.01 + 5 \times 0.5 = 2.51$}
 <<>>=
 att_pip = bms(attitude, mprior="pip", mprior.size=c(.01,.5,.5,.5,.5,.5), user.int=F)
 @
-But the results (obtained with \verb+coef(att_pip)+) show that \verb+complaints+ still retains its PIP of near 100\%. Instead, posterior model size decreases (as evidenced in a call to \verb+plotModelsize(att_pip)+), and all other variables obtain a far smaller PIP. 
+But the results (obtained with \verb+coef(att_pip)+) show that \verb+complaints+ still retains its PIP of near 100\%. Instead, posterior model size decreases (as evidenced in a call to \newline\mbox{\texttt{plotModelsize(att\_pip)}}), and all other variables obtain a far smaller PIP. 
 
 \subsection{Beta-Binomial Model Priors}
 Like the uniform prior, the fixed common $\theta$ in the binomial prior centers the mass of of its distribution near the prior model size. A look on the prior model distribution with the following command shows that the prior model size distribution is quite concentrated around its mode. 
@@ -157,16 +155,20 @@ att_random = bms(attitude, mprior="random", mprior.size=3, user.int=F)
 plotModelsize(att_random)
 @
 
-With the beta-binomial specification and prior model size $\bar{m}=K/2$, the model prior is completely flat, while the posterior model size turns out to be $1.73$. In terms of coefficient and posterior model size distribution, the results are very similar to those of \verb+att_fixed+, even though the latter approach involved a tighter model prior. Concluding, a decrease of prior importance by the use of the beta-binomial framework supports the results found in \verb+att_fixed+.
+With the beta-binomial specification and prior model size $\bar{m}=K/2$, the model prior is completely flat over model sizes, while the posterior model size turns out to be $1.73$. In terms of coefficient and posterior model size distribution, the results are very similar to those of \verb+att_fixed+, even though the latter approach involved a tighter model prior. Concluding, a decrease of prior importance by the use of the beta-binomial framework supports the results found in \verb+att_fixed+.
 
-Compare the PIPs from the four approaches presented so far with the following command:
-<<echo=FALSE>>=
-
-<<fig=TRUE>>=
-plotComp(att, att_fixed, att_pip, att_random, cex=2)
+We can compare the PIPs from the four approaches presented so far with the following command:\footnote{This is equivalent to the command \texttt{plotComp(att, att\_fixed, att\_pip, att\_random)}}
+<<eval=FALSE>>=
+plotComp(Uniform=att, Fixed=att_fixed, PIP=att_pip, Random=att_random)
 @
 
-Here as well, \verb+att_fixed+ (Model 2) and \verb+att_random+ (Model 4) display similar results with PIPs plainly smaller than those of \verb+att+ (Model 1). 
+<<fig=TRUE, echo=FALSE>>=
+plotComp(Uniform=att, Fixed=att_fixed, PIP=att_pip, Random=att_random, cex=2)
+@
+
+Here as well, \verb+att_fixed+ (Fixed) and \verb+att_random+ (Random) display similar results with PIPs plainly smaller than those of \verb+att+ (Uniform). 
+
+Note that the appendix contains an overview of the built-in model priors available in BMS. Moreover, BMS allows the user to define any custom model prior herself and straightforwardly use it in \texttt{bms} - for examples, check \mbox{\texttt{http://bms.zeugner.eu/custompriors.php}}. Another concept relating to model priors is to keep fixed regressors to be included in every sampled model: Section \ref{ssec:fixreg} provides some examples.
 
 
 \section{MCMC Samplers and More Variables}\label{sec:mcmc}
@@ -183,7 +185,7 @@ $$p_{i,j} = \min(1, p(M_j|y,X)/p(M_i|y,x) )$$
 In addition to enumerating all models, BMS implements two MCMC samplers that differ in the way they propose candidate models:
 \begin{itemize}
 	\item \emph{Birth-death sampler} (\verb+bd+): This is the standard model sampler used in most BMA routines. One of the $K$ potential covariates is randomly chosen; if the chosen covariate forms already part of the current model $M_i$, then the candidate model $M_j$ will have the same set of covariates as $M_i$ but for the chosen variable ('dropping' a variable). If the chosen covariate is not contained in $M_i$, then the candidate model will contain all the variables from $M_i$ plus the chosen covariate ('adding' a variable).
-	\item \emph{Reversible-jump sampler} (\verb+rev.jump+): Adapted to BMA by \citet{mad95} this sampler either draws a candidate by the birth-death method with 50\% probability. In the other case (chosen with 50\% probability) a 'swap' is proposed, i.e. the candidate model randomly drops one covariate with respect to $M_i$ and randomly adds one chosen at random from the potential covariates that were not included in model $M_i$.
+	\item \emph{Reversible-jump sampler} (\verb+rev.jump+): Adapted to BMA by \citet{mad95} this sampler either draws a candidate by the birth-death method with 50\% probability. In the other case (chosen with 50\% probability) a 'swap' is proposed, i.e. the candidate model $M_j$ randomly drops one covariate with respect to $M_i$ and randomly adds one chosen at random from the potential covariates that were not included in model $M_i$.
 	\item \emph{Enumeration} (\verb+enum+): Up to fourteen covariates, complete enumeration of all models is the default option: This means that instead of an approximation by means of the aforementioned MCMC sampling schemes \textit{all} possible models are evaluated. As enumeration becomes quite time-consuming or infeasible for many variables, the default option is \verb+mcmc="bd"+ in case of $K>14$, though enumeration can still be invoked with the command \verb+mcmc="enumerate"+. 
 \end{itemize}
 
@@ -203,10 +205,12 @@ Before looking at the coefficients, check convergence by invoking the \verb+summ
 summary(fls1)
 @
 Under \verb+Corr PMP+, we find the correlation between iteration counts and analytical PMPs for the 2000 best models (the number 2000 was specified with the \verb+nmodel=2000+ argument). At \Sexpr{summary(fls1)["Corr PMP"]}, this correlation is far from perfect but already indicates a good degree of convergence. For a closer look at convergence between analytical and MCMC PMPs, compare the actual distribution of both concepts:
+
 <<fig=TRUE>>=
 plotConv(fls1)
 @
-The chart presents the best 2,000 models encountered ordered by their analytical PMP (the red line), and plots their MCMC iteration counts (the blue line). For an even closer look, one might just check the corresponding image for just the best 100 models with the following command:\footnote{With \texttt{bma} objects such as \texttt{fls1}, the indexing parentheses \texttt{[]} are used to select subsets of the best models retained in the object. For instance, while \texttt{fls1} contains 2,000 models, \texttt{fls1[1:100]} contains only 100 models, namely the best ones. Correspondingly, \texttt{fls1[37]} would only contain the 37th-best model.}
+
+The chart presents the best 2,000 models encountered ordered by their analytical PMP (the red line), and plots their MCMC iteration counts (the blue line). For an even closer look, one might just check the corresponding image for just the best 100 models with the following command:\footnote{With \texttt{bma} objects such as \texttt{fls1}, the indexing parentheses \texttt{[]} are used to select subsets of the (ranked) best models retained in the object. For instance, while \texttt{fls1} contains 2,000 models, \texttt{fls1[1:100]} only contains the 100 best models among them. Correspondingly, \texttt{fls1[37]} would only contain the 37th-best model. Cf. \texttt{help('[.bma')}}
 <<fig=TRUE>>=
 plotConv(fls1[1:100])
 @
@@ -219,11 +223,11 @@ Since the time for updating the iteration counts for the 'top' models grows in l
 <<>>=
 pmp.bma(fls1)[1:5,]
 @
-The numbers in the left-hand column represent analytical PMPs while the right-hand side displays MCMC-based PMPs. Both decline in roughly the same fashion, however the values for analytical PMPs are considerably larger than the MCMC-based ones. This comes from the fact that iteration-based PMPs compare to the entirety of PMPs encountered, while the analytical values were only normalized by the sum of available analytical PMPs (in this case 2,000) -- cf. equation (\ref{eq:bf}).\footnote{In the call to \texttt{topmodels.bma} on page \pageref{topmodcall}, the PMPs under 'MCMC' and analytical ('exact') concepts were equal since 1) enumeration bases both 'top' model calculation and aggregate on-the-fly results on analytical PMPs and 2) because all possible models were retained in the object \texttt{att}.} In order to see the importance of all 'top models' with respect to the full model space, we can thus sum up their MCMC-based PMPs as follows:
+The numbers in the left-hand column represent analytical PMPs (\texttt{PMP (Exact)}) while the right-hand side displays MCMC-based PMPs (\texttt{PMP (MCMC)}). Both decline in roughly the same fashion, however sometimes the values for analytical PMPs differ considerably from the MCMC-based ones. This comes from the fact that MCMC-based PMPs derive from the number of iteration counts, while the 'exact' PMPs are calculated from comparing the analytical likelihoods of the best models -- cf. equation (\ref{eq:bf}).\footnote{In the call to \texttt{topmodels.bma} on page \pageref{topmodcall}, the PMPs under 'MCMC' and analytical ('exact') concepts were equal since 1) enumeration bases both 'top' model calculation and aggregate on-the-fly results on analytical PMPs and 2) because all possible models were retained in the object \texttt{att}.} In order to see the importance of all 'top models' with respect to the full model space, we can thus sum up their MCMC-based PMPs as follows:
 <<>>=
 colSums(pmp.bma(fls1))
 @
-The second scalar shows that in total, the top 2,000 models account for ca. \Sexpr{round(colSums(pmp.bma(fls1))[[2]],2)*100}\% of posterior model mass.\footnote{Note that this share was already provided in column \texttt{\% Topmodels} resulting from the \texttt{summary} command on page \pageref{sumfls1}.} They should thus provide a rough approximation of posterior results that might or might not be better than the MCMC-based results. For this purpose, compare the best 5 covariates in terms of PIP by analytical and MCMC methods: \verb+coef(fls1)+ will display the results based on MCMC counts.
+Both columns sum up to the same number and show that in total, the top 2,000 models account for ca. \Sexpr{round(colSums(pmp.bma(fls1))[[2]],2)*100}\% of posterior model mass.\footnote{Note that this share was already provided in column \texttt{\% Topmodels} resulting from the \texttt{summary} command on page \pageref{sumfls1}.} They should thus provide a rough approximation of posterior results that might or might not be better than the MCMC-based results. For this purpose, compare the best 5 covariates in terms of PIP by analytical and MCMC methods: \verb+coef(fls1)+ will display the results based on MCMC counts.
 <<>>=
 coef(fls1)[1:5,]
 @
@@ -254,7 +258,7 @@ With \Sexpr{round(cor(pmp.bma(fls_combi))[2,1],2)}, the PMP correlation from the
 
 
 \section{Alternative Formulations for Zellner's g Prior}\label{sec:gprior}
-\subsection{Alternative Fixed g priors}
+\subsection{Alternative Fixed g-Priors}
 Virtually all BMA applications rely on the presented framework with Zellner's $g$ prior, and the bulk of them relies on specifying a fixed $g$. As mentioned in section \ref{ssec:zg}, the value of $g$ corresponds to the degree of prior uncertainty: A low $g$ renders the prior coefficient distribution tight around a zero mean, while a large $g$ implies large prior coefficient variance and thus decreases the importance of the coefficient prior. 
 
 While some popular default elicitation mechanisms for the $g$ prior (we have seen UIP and BRIC) are quite popular, they are also subject to severe criticism. Some (e.g \citealt{fls:bmp}) advocate a comparatively large $g$ prior to minimize prior impact on the results, stay close to OLS coefficients, and represent the absolute lack of prior knowledge. Others (e.g. \citealt{cic08}) demonstrate that such a large $g$ may not be robust to noise innovations and risks over-fitting -- in particular if the the noise component plays a substantial role in the data. Again others \citep{eichi07} advocate intermediate fixed values for the $g$ priors or present alternative default specifications \citep{liang:mgp}.\footnote{Note however, that $g$ should in general be monotonously increasing in $N$: \citet{fls:bmp} prove that this sufficient for 'consistency', i.e. if there is one single linear model as in equation (\ref{eq:lm}), than its PMP asymptotically reaches 100\% as sample size $N \rightarrow \infty$.}
@@ -267,7 +271,7 @@ summary(fls_g5)
 @
 The PIPs and coefficients for the best five covariates are comparable to the results from section \ref{ssec:fls} but considerably smaller, due to a tight shrinkage factor of $\frac{g}{1+g}=\frac{5}{6}$ (cf. section \ref{ssec:zg}). More important, the posterior expected model size \Sexpr{round(sum(coef(fls_g5)[,1]),1)} exceeds that of \verb+fls_combi+ by a large amount. This stems from the less severe size penalty imposed by eliciting a small $g$. Finally, with \Sexpr{round(cor(pmp.bma(fls_g5))[2,1],2)}, the correlation between analytical and MCMC PMPs means that the MCMC sampler has not at all converged yet. \citet{fz:superM} show that the smaller the $g$ prior, the less concentrated is the PMP distribution, and therefore the harder it is for the MCMC sampler to provide a reasonable approximation to the actual PMP distribution. Hence the above command should actually be run with many more iterations in order to achieve meaningful results.
 
-\subsection{Model-specific g priors}
+\subsection{Model-specific g-Priors}
 Eliciting a fixed $g$-prior common to all models can be fraught with difficulties and unintended consequences. Several authors have therefore proposed to rely on model-specific priors (cf. \citealt{liang:mgp} for an overview), of which the following allow for closed-form solutions and are implemented in BMS:
 \begin{itemize}
 	\item Empirical Bayes $g$ -- local (\verb+EBL+): $g_\gamma=arg max_g \; p(y|M_\gamma,X,g)$. Authors such as \citet{george00} or \citet{hansen01} advocate an 'Empirical Bayes' approach by using information contained in the data $(y,X)$ to elicit $g$ via maximum likelihood. This amounts to setting $g_\gamma=\max(0,F^{OLS}_\gamma-1)$ where $F^{OLS}_\gamma$ is the standard OLS F-statistic for model $M_\gamma$. Apart from obvious advantages discussed below, the \verb+EBL+ prior is not so popular since it involves 'peeking' at the data in prior formulation. Moreover, asymptotic 'consistency' of BMA is not guaranteed in this case.
@@ -290,7 +294,7 @@ plot(fls_ebl)
 The upper chart shows that posterior model size distribution remains very close to the model prior; The lower part displays the discord between iteration count frequencies and analytical PMPs.
 
 
-The above results show that using a flexible and model-specific prior on \citet{fls:ccg} data results in rather small posterior estimates of $\frac{g}{1+g}$, thus indicating that the \verb+g="BRIC"+ prior used in \verb+fls_combi+ may be set too far from zero. This interacts with the uniform model prior to concentrate posterior model mass on quite large models. However, imposing a uniform model prior means to expect a model size of $K/2=20.5$, which may seem overblown. Instead, try to impose smaller model size through a corresponding model prior -- e.g. impose a prior model size of 7 as in \citet{bace04}. This can be combined with a hyper-$g$ prior, where the argument \verb+g="hyper=UIP"+ imposes an $a$ parameter such that the prior expected value of $g$ corresponds to the unit information prior ($g=N$).
+The above results show that using a flexible and model-specific prior on \citet{fls:ccg} data results in rather small posterior estimates of $\frac{g}{1+g}$, thus indicating that the \verb+g="BRIC"+ prior used in \verb+fls_combi+ may be set too far from zero. This interacts with the uniform model prior to concentrate posterior model mass on quite large models. However, imposing a uniform model prior means to expect a model size of $K/2=20.5$, which may seem overblown. Instead, try to impose smaller model size through a corresponding model prior -- e.g. impose a prior model size of 7 as in \citet{bace04}. This can be combined with a hyper-$g$ prior, where the argument \verb+g="hyper=UIP"+ imposes an $a$ parameter such that the prior expected value of $g$ corresponds to the unit information prior ($g=N$).\footnote{This is the default hyper-g prior and may therefore be as well obtained with \texttt{g=\textquotedbl hyper \textquotedbl}. }
 <<>>=
 fls_hyper = bms(datafls, burn=20000, iter=50000, g="hyper=UIP", mprior="random", mprior.size=7, nmodel=1000, user.int=F)
 summary(fls_hyper)
@@ -307,7 +311,7 @@ image(fls_hyper)
 @
 
 In a broad sense, the coefficient results correspond to those of \verb+fls_combi+, at least in expected values. However, the results from \verb+fls_hyper+ were obtained under more sophisticated priors that were specifically designed to avoid unintended influence from prior parameters: 
-By construction, the large shrinkage factor under \verb+fls_combi+ induced a quite small posterior model size of \Sexpr{round(as.numeric(summary(fls_combi)[[1]]),1)} and concentrated posterior mass tightly on the best models encountered (they make up \Sexpr{round(as.numeric(summary(fls_combi)[[8]]),0)}\% of the entire model mass). In contrast, the hyper-g prior employed for \verb+fls_hyper+ indicated a rather low posterior shrinkage factor and consequently resulted in higher posterior model size (\Sexpr{round(as.numeric(summary(fls_hyper)[[1]]),1)}) and less model mass concentration (\Sexpr{round(as.numeric(summary(fls_combi)[[8]]),0)}\%). 
+By construction, the large shrinkage factor under \verb+fls_combi+ induced a quite small posterior model size of \Sexpr{round(as.numeric(summary(fls_combi)[[1]]),1)} and concentrated posterior mass tightly on the best models encountered (they make up \Sexpr{round(as.numeric(summary(fls_combi)[[8]]),0)}\% of the entire model mass). In contrast, the hyper-g prior employed for \verb+fls_hyper+ indicated a rather low posterior shrinkage factor and consequently resulted in higher posterior model size (\Sexpr{round(as.numeric(summary(fls_hyper)[[1]]),1)}) and less model mass concentration (\Sexpr{round(as.numeric(summary(fls_hyper)[[8]]),0)}\%). 
 
 \subsection{Posterior Coefficient Densities}
 In order to compare more than just coefficient expected values, it is advisable to consult the entire posterior distribution of coefficients. For instance, consult the posterior density of the coefficient for \verb+Muslim+, a variable with a PIP of \Sexpr{round(estimates.bma(fls_combi)["Muslim",1],3)*100}\%: The \verb+density+ method produces marginal densities of posterior coefficient distributions and plots them, where the argument \verb+reg+ specifies the variable to be analyzed. 
@@ -324,12 +328,60 @@ Note that the posterior marginal density is actually a model-weighted mixture of
 
 Now let us compare this density with the results under the hyper-$g$ prior:\footnote{Since for the hyper-$g$ prior, the marginal posterior coefficient distribution derive from quite complicated expressions, executing this command could take a few seconds.}
 <<fig=TRUE>>=
-density(fls_hyper,reg="Muslim",addons="Eebl")
+dmuslim=density(fls_hyper,reg="Muslim",addons="Eebl")
 @
 
 Here, the \verb+addons+ argument assigns the vertical bars to be drawn: the expected conditional coefficient from MCMC (\verb+E+) results should be indicated in contrast to the expected coefficient based on analytical PMPs (\verb+e+). In addition the expected coefficients under the individual models are plotted (\verb+b+) and a legend is included (\verb+l+). The density seems more symmetric than before and the analytical results seem to be only just smaller than what could be expected from MCMC results. 
 
-Nonetheless, even though \verb+fls_hyper+ and \verb+fls_combi+ applied very different $g$ and model priors, the results for the \verb+Muslim+ covariate are broadly similar: It is unanimously positive, with a conditional expected value somewhat above $0.01$.
+Nonetheless, even though \verb+fls_hyper+ and \verb+fls_combi+ applied very different $g$ and model priors, the results for the \verb+Muslim+ covariate are broadly similar: It is unanimously positive, with a conditional expected value somewhat above $0.01$. In fact 95\% of the posterior coefficient mass seems to be concentrated between \Sexpr{round(quantile.coef.density(dmuslim,.025),3)} and \Sexpr{round(quantile.coef.density(dmuslim,.975),3)}:
+<<>>=
+quantile(dmuslim, c(0.025, 0.975))
+@
+\section{Predictive Densities}
+Of course, BMA lends itself not only to inference, but also to prediction. The employed 'Bayesian Regression' models naturally give rise to predictive densities, whose mixture yields the BMA predictive density -- a procedure very similar to the coefficient densities explored in the previous section.
+
+Let us, for instance, use the information from the first 70 countries contained in \texttt{datafls} to forecast economic growth for the latter two, namely Zambia (identifier \texttt{ZM}) and Zimbabwe (identifier \texttt{ZW}). We then can use the function \texttt{pred.density} on the BMA object \texttt{fcstbma} to form predictions based on the explanatory variables for Zambia and Zimbabwe (which are in \verb+datafls[71:72,]+). 
+
+<<>>=
+fcstbma= bms(datafls[1:70,], mprior="uniform", burn=20000, iter=50000, user.int=FALSE)
+
+pdens = pred.density(fcstbma, newdata=datafls[71:72,])
+@
+
+The resulting object \texttt{pdens} holds the distribution of the forecast for the two countries, conditional on what we know from other countries, and the explanatory data from Zambia and Zimbabwe. The expected value of this growth forecast is very similar to the classical point forecast and can be accessed with \verb+pdens$fit+.\footnote{Note that this is equivalent to \texttt{predict(fcstbma, datafls[71:72, ])} .} Likewise the standard deviations of the predictive distribution correspond to classical standard errors and are returned by \verb+pdens$std.err+.
+But the predictive density for the growth in e.g. Zimbabwe might be as well visualized with the following command:\footnote{Here, 2 means to plot for the second forecasted observation, in this case \texttt{ZW}, the 72-th row of \texttt{datafls}.}
+
+<<fig=TRUE>>=
+plot(pdens, 2)
+@
+
+Here, we see that conditional on Zimbabwe's explanatory data, we expect growth to be concentrated around \Sexpr{round(pdens[['fit']][2],2)}. And the actual value in \verb+datafls[72,1]+ with $0.0046$ is not too far off from that prediction. A closer look at both our densities with the function \texttt{quantile} shows that for Zimbabwe, any growth rate between 
+\Sexpr{ round(quantile(pdens,c(.05,.95))[2,1], 2) } and \Sexpr{ round(quantile(pdens,c(.05,.95))[2,2], 2) } is quite likely.
+
+<<>>=
+quantile(pdens, c(0.05, 0.95))
+@
+
+For Zambia (\texttt{ZM}), though, the explanatory variables suggest that positive economic growth should be expected. But over our evaluation period, Zambian growth has been even worse than in Zimbabwe (with \Sexpr{ round(datafls[71,1], 2) } as from \verb+datafls["ZM",1]+).\footnote{Note that since \texttt{ZM} is the rowname of the 71-st row of \texttt{datafls}, this is equivalent to calling \texttt{datafls[71, ]}.} Under the predictive density for Zambia, this actual outcome seems quite unlikely. 
+
+To compare the BMA prediction performs with actual outcomes, we could look e.g. at the forecast error \verb+pdens$fit - datafls[71:72,1]+. However it would be better to take standard errors into account, and even better follow the 'Bayesian way' and evaluate the predictive density of the outcomes as follows:
+<<>>=
+pdens$dyf(datafls[71:72,1])
+@
+The density for Zimbabwe is quite high (similar to the mode of predictive density as seen in the chart above), whereas the one for Zambia is quite low. In order to visualize how bad the forecast for Zambia was, compare a plot of predictive density to the actual outcome, which is situated far to the left.
+
+<<fig=TRUE>>=
+plot(pdens, "ZM", realized.y=datafls["ZM",1])
+@
+
+The results for Zambia suggest either that it is an outlier or that our forecast model might not perform that well. One could try out other prior settings or data, and compare the differing models in their joint predictions for Zambia and Zimbabwe (or even more countries). A standard approach to evaluate the goodness of forecasts would be to e.g. look at root mean squared errors. However Bayesians (as e.g \citealt{fls:bmp}) often prefer to look at densities of the outcome variables and combine them in a 'log-predictive score' (LPS). It is defined as follows, where $p(y^f_i | X, y, X^f_i)$ denotes predictive density for $y^f_i$ (Zambian growth) based on the model information $(y, X)$ (the first 70 countries) and the explanatory variables for the forecast observation (Zambian investment, schooling, etc.).
+$$ - \sum_i \log(p(y^f_i | X, y, X^f_i)) $$
+
+The log-predictive score can be accessed with \verb+lps.bma+. 
+<<>>=
+lps.bma(pdens, datafls[71:72,1])
+@
+Note however, that the LPS is only meaningful when comparing different forecast settings. 
 
 \addcontentsline{toc}{section}{References}
 \bibliography{bmasmall}
@@ -341,8 +393,9 @@ Nonetheless, even though \verb+fls_hyper+ and \verb+fls_combi+ applied very diff
 
 \appendix
 \section{Appendix}
-\subsection{Available Model Priors -- Synopsis}
-The following provides an overview over the model priors available in \verb+bms+. Default is \verb+mprior="random"+. For implementation details and examples, consult \verb+help(bms)+.
+\subsection{Available Model Priors -- Synopsis}\label{ssec:mpriorsyn}
+The following provides an overview over the model priors available in \verb+bms+. Default is \verb+mprior="random"+. For details and examples on built-in priors, consult \verb+help(bms)+. For defining different, custom $g$-priors, consult \verb+help(gprior)+ or \texttt{http://bms.zeugner.eu/custompriors.php}.
+
 \subsubsection*{Uniform Model Prior}
 \begin{itemize}
 	\item \emph{Argument}: \verb+mprior="uniform"+
@@ -386,14 +439,14 @@ The following provides an overview over the model priors available in \verb+bms+
 
 
 
-\subsection{Available $g$ Priors -- Synopsis}
-The following provides an overview over the $g$ priors available in \verb+bms+. Default is \verb+g="UIP"+. For implementation details and examples, consult \verb+help(bms)+.
+\subsection{Available g-Priors -- Synopsis}
+The following provides an overview over the $g$-priors available in \verb+bms+. Default is \verb+g="UIP"+. For implementation details and examples, consult \verb+help(bms)+. For defining different, custom $g$-priors, consult \verb+help(gprior)+ or \texttt{http://bms.zeugner.eu/custompriors.php}.
 \subsubsection*{Fixed $g$}
 \begin{itemize}
 	\item \emph{Argument}: \verb+g=x+ where \verb+x+ is a positive real scalar; 
 	\item \emph{Concept}: Fixed $g$ common to all models
 	\item \emph{Reference}: \citet{fls:bmp}
-	\item \emph{Sub-options}: Unit information prior \verb+g="UIP"+ sets $g=N$; \verb+g="BRIC"+ sets $g=\max(N,K)$, a combination of BIC and RIC. Note these two options guarantee asymptotic consistency.
+	\item \emph{Sub-options}: Unit information prior \verb+g="UIP"+ sets $g=N$; \verb+g="BRIC"+ sets $g=\max(N,K^2)$, a combination of BIC and RIC. (Note these two options guarantee asymptotic consistency.) Other options include \verb+g="RIC"+ for $g=K^2$ and \verb+g="HQ"'+ for the Hannan-Quinn setting $g=\log(N)^3$.
 \end{itemize}
 
 \subsubsection*{Empirical Bayes (Local) $g$}
@@ -409,15 +462,16 @@ The following provides an overview over the $g$ priors available in \verb+bms+. 
 	\item \emph{Argument}: \verb+g="hyper"+ 
 	\item \emph{Concept}: A Beta prior on the shrinkage factor with $p(\frac{g}{1+g}) = B(1,\frac{a}{2}-1)$. Parameter $a$ ($2 < a \leq 4$) represents prior beliefs: $a=4$ implies prior shrinkage to be uniformly distributed over $[0,1]$, $a \rightarrow 2$ concentrates mass close to unity. Note that prior expected value of the shrinkage facor is $E(\frac{g}{1+g}) = \frac{2}{a}$.
 	\item \emph{Reference}: \citet{liang:mgp}; \citet{fz:superM}
-	\item \emph{Sub-options}: \verb+g="hyper=x"+ with \verb+x+ defining the parameter $a$ (e.g. \verb+g="hyper=3"+ sets $a=3$). \verb+g="hyper=UIP"+ sets the prior expected shrinkage factor equivalent to the UIP prior $E(\frac{g}{1+g})=\frac{N}{1+N}$; \verb+g="hyper=BRIC"+ sets the prior expected shrinkage factor equivalent to the BRIC prior. Note that the latter two options guarantee asymptotic consistency.
+	\item \emph{Sub-options}: \verb+g="hyper=x"+ with \verb+x+ defining the parameter $a$ (e.g. \verb+g="hyper=3"+ sets $a=3$). \verb+g="hyper"+ resp. \verb+g="hyper=UIP"+ sets the prior expected shrinkage factor equivalent to the UIP prior $E(\frac{g}{1+g})=\frac{N}{1+N}$; \verb+g="hyper=BRIC"+ sets the prior expected shrinkage factor equivalent to the BRIC prior. Note that the latter two options guarantee asymptotic consistency.
 \end{itemize}
 
-\subsection{'Bayesian Regression' with Zellner's $g$ -- An Example}\label{ssec:zlm}
+
+\subsection{'Bayesian Regression' with Zellner's $g$ -- Bayesian Model Selection}\label{ssec:zlm}
 The linear model presented in section \ref{ssec:zg} using Zellner's $g$ prior is implemented under the function \verb+zlm+. For instance, we might consider the attitude data from section \ref{sec:example} and estimate just the full model containing all 6 variables. For this purpose, first load the built-in data set with the command
 <<>>=
 data(attitude)
 @
-The full model is obtained by applying the function \verb+zlm+ on the data set and storing the estimation into \verb+att_full+. Zellner's $g$ prior is estimated by the argument \verb+g+ just in the same way as in section \ref{sec:gprior}. 
+The full model is obtained by applying the function \texttt{zlm} on the data set and storing the estimation into \texttt{att\_full}. Zellner's $g$ prior is estimated by the argument \texttt{g} just in the same way as in section \ref{sec:gprior}.\footnote{Likewise, most methods applicable to \texttt{bms}, such as \texttt{density}, \texttt{predict} or \texttt{coef}, work analogously for \texttt{zlm}.} 
 <<>>=
 att_full = zlm(attitude,g="UIP")
 @
@@ -425,10 +479,51 @@ The results can then be displayed by using e.g. the \verb+summary+ method.
 <<>>=
 summary(att_full)
 @
-The results are very similar to those resulting from OLS (which can be obtained via \verb+summary(lm(attitude))+). The less conservative, i.e. the larger $g$ becomes, the closer results get to OLS. But remember that the best model from the BMA application was not the full model but the model containing only the variable \verb+complaints+. The function \verb+as.zlm+ extracts this single model for further analysis, with the argument \verb+model+ specifying the rank-order of the model to be extracted. The following command reads the best model from the BMA results in section \ref{sec:example} into the variable \verb+att_best+.
+The results are very similar to those resulting from OLS (which can be obtained via \verb+summary(lm(attitude))+). The less conservative, i.e. the larger $g$ becomes, the closer the results get to OLS. But remember that the full model was not the best model from the BMA application in section \ref{sec:example}. In order to extract the best encountered model, use the function \verb+as.zlm+ to extract this single model for further analysis (with the argument \verb+model+ specifying the rank-order of the model to be extracted). The following command reads the best model from the BMA results in section into the variable \verb+att_best+.
+
 <<>>=
 att_best = as.zlm(att,model=1)
 summary(att_best)
 @
-The resulting log-marginal likelihood shows why this model performed better than the full model
+
+As suspected, the best model according to BMA is the on including only \verb+complaints+ and the intercept, as it has the highest log-marginal likelihood (\verb+logLik(att_best)+). In such a way, the command \texttt{as.zlm} can be combined with \texttt{bms} for 'Bayesian Model Selection', i.e. using the model prior and posterior framework to focus on teh model with highest posterior mass. Via the utility \texttt{model.frame}, this best model can be straightforwardly converted into a standard  OLS model:
+
+<<>>=
+att_bestlm = lm(model.frame(as.zlm(att)))
+summary(att_bestlm)
+@
+
+
+\subsection{BMA when Keeping a Fixed Set of Regressors}\label{ssec:fixreg}
+While BMA should usually compare as many models as possible, some considerations might dictate the restriction to a subspace of the $2^K$ models. For complicated settings one might employ a customly designed model prior (cf. section \ref{ssec:mpriorsyn}). The by far most common setting, though, is to keep some regressors fixed in the model setting, and apply Bayesian Model uncertainty only to a subset of regressors.
+
+Suppose, for instance, that prior research tells us that any meaningful model for \texttt{attitude} (as in section \ref{sec:example}) must include the variables \texttt{complaints} and \texttt{learning}. The only question is whether the additional four variables matter (which reduces the potential model space to $2^4=16$). We thus sample over these models while keeping \texttt{complaints} and \texttt{learning} as fixed regressors: 
+
+<<>>=
+att_learn = bms(attitude,mprior="uniform", fixed.reg=c("complaints", "learning") )
+@
+
+The results show that the PIP and the coefficients for the remaining variables increase a bit compared to \texttt{att}. The higher PIPs are related to the fact that the posterior model size (as in \verb+sum(coef(att_learn)[,1])+) is quite larger as under \texttt{att}. This follows naturally from our model prior: putting a uniform prior on all models between parameter size $2$ (the base model) and $6$ (the full model) implies a prior expected model size of $4$ for \texttt{att\_learn} instead of the $3$ for \texttt{att}.\footnote{  The command
+\texttt{ att\_learn2 = bms(attitude, mprior='fixed', mprior.size=3, fixed.reg=c('complaints', 'learning') ) } 
+produces coefficients that are much more similar to \texttt{att}.} So to achieve comparable results, one needs to take the number of fixed regressors into account when setting the model prior parameter \texttt{mprior.size}. Consider another example: 
+
+Suppose we would like to sample the importance and coefficients for the cultural dummies in the dataset \texttt{datafls}, conditional on information from the remaining 'hard' variables. This implies keeping 27 fixed regressors, while sampling over the 14 cultural dummies. Since model uncertainty thus applies only to $2^{14}=16,384$ models, we resort to full enumeration of the model space. 
+
+<<>>=
+fls_culture = bms(datafls,fixed.reg=c(1,8:16,24,26:41), mprior="random", mprior.size=28, mcmc="enumeration", user.int=F)
+@
+Here, the vector \texttt{c(1,8:16,24,26:41)} denotes the indices of the regressors in \texttt{datafls} to be kept fixed.\footnote{Here, indices start from the first regressor, i.e. they do not take the dependent variable into account. The fixed data used above therefore corresponds to \texttt{datafls[ ,c(1,8:16,24,26:41) $+$ 1]}.} Moreover, we use the beta-binomial ('random') model prior. The prior model size of $30$ embodies our prior expectation that on average $1$ out of the $14$ cultural dummies should be included in the true model. As we only care about those 14 variables, let us just display the results for the 14 variables with the least PIP: 
+
+<<>>=
+coef(fls_culture)[28:41, ]
+@
+
+As before, we find that \texttt{Confucian} (with positive sign) as well as \texttt{Hindu} and \texttt{SubSahara} (negative signs) have the most important impact conditional on 'hard' information. Moreover, the data seems to attribute more importance to cultural dummies as we expectd with our model prior: Comparing prior and posterior model size with the following command shows how much importance is attributed to the dummies.
+<<fig=TRUE>>=
+plotModelsize(fls_culture, ksubset=27:41)
+@
+
+Expected posterior model size is close to \Sexpr{ round(sum(coef(fls_culture)[,1]),0) }, which means that \Sexpr{ round(sum(coef(fls_culture)[,1]),0) -27 } of the cultural dummies should actually be included in a 'true' model. 
+
+
 \end{document}

@@ -9,7 +9,7 @@
 bms(X.data, burn = 1000, iter = NA, nmodel = 500, mcmc = "bd",
   g = "UIP", mprior = "random", mprior.size = NA, user.int = TRUE, 
     start.value = NA, g.stats = TRUE, 
-    logfile = FALSE, logstep = 10000, force.full.ols = FALSE)
+    logfile = FALSE, logstep = 10000, force.full.ols = FALSE, fixed.reg=numeric(0))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -69,6 +69,7 @@ bms(X.data, burn = 1000, iter = NA, nmodel = 500, mcmc = "bd",
   \item{logstep}{ specifies at which number of posterior draws information is written to the log file; default: 10 000 iterations }
   \item{force.full.ols}{ default FALSE. If \code{force.full.ols=TRUE}, the OLS estimation part of the sampling procedure relies on slower matrix inversion, 
              instead of streamlined routines. \code{force.full.ols=TRUE} can slow down sampling but may deal better with highly collinear data}
+  \item{fixed.reg}{ indices or variable names of \code{X.data} that are fixed regressors to be always included in every sampled model. Note: the paramter \code{mprior.size} refers to prior model size including these fixed regressors. }
   %\item{exact}{ deprecated }
   %\item{int}{ deprecated }
   %\item{printRes}{ deprecated }
@@ -103,10 +104,10 @@ bms(X.data, burn = 1000, iter = NA, nmodel = 500, mcmc = "bd",
   \item{arguments}{a list of the evaluated function arguments provided to \code{bms} (see above)}
   \item{topmod}{a 'topmod' object containing the best drawn models. see \code{\link{topmod}} for more details}
   \item{start.pos}{the positions of the starting model. If bmao is a'bma' object this corresponds to covariates bmao$reg.names[bmao$start.pos]. If bmao is a chain that resulted from several starting models (cf. \code{\link{c.bma}}, then \code{start.pos} is a list detailing all of them.} 
-  \item{gprior.info}{a list detailing information on the g-prior: \code{gtype} corresponds to argument \code{g} above, \code{is.constant} is FALSE if \code{gtype} is either "hyper" or "EBL", \code{return.g.stats} corresponds to argument \code{g.stats} above, \code{shrinkage.moments} contains the first and second moments of the shrinkage factor (only if \code{return.g.stats==TRUE}), \code{g} details the fixed g (if \code{is.constant==TRUE}), \code{hyper.parameter} corresponds to the hyper-g parameter \eqn{a} as in Liang et al. (2008) }
-  \item{mprior.info}{a list detailing information on the model prior: \code{origargs} lists the original arguments to \code{mprior} and \code{mprior.size} above; \code{pmp(...)} is a function to calculate the prior model probability for a specific model; \code{mp.mode} corresponds to argument \code{mprior} above; \code{mp.msize} denotes the prior mode size; \code{mp.Kdist} is a (K+1) vector with the prior model size distribution from 0 to K}
+  \item{gprior.info}{a list of class \code{\link{gprior-class}}, detailing information on the g-prior: \code{gtype} corresponds to argument \code{g} above, \code{is.constant} is FALSE if \code{gtype} is either "hyper" or "EBL", \code{return.g.stats} corresponds to argument \code{g.stats} above, \code{shrinkage.moments} contains the first and second moments of the shrinkage factor (only if \code{return.g.stats==TRUE}), \code{g} details the fixed g (if \code{is.constant==TRUE}), \code{hyper.parameter} corresponds to the hyper-g parameter \eqn{a} as in Liang et al. (2008) }
+  \item{mprior.info}{a list of class \code{\link{mprior-class}}, detailing information on the model prior: \code{origargs} lists the original arguments to \code{mprior} and \code{mprior.size} above; \code{mp.msize} denotes the prior mode size; \code{mp.Kdist} is a (K+1) vector with the prior model size distribution from 0 to K}
   \item{X.data}{data.frame or matrix: corresponds to argument \code{X.data} above, possibly cleaned for NAs}
-  \item{reg.names}{character vector: the covariate names to be used for X.data}
+  \item{reg.names}{character vector: the covariate names to be used for X.data (corresponds to \code{\link{variable.names.bma}} }
   \item{bms.call}{the original call to the \code{bms} function}
 }
 \references{ 
@@ -163,6 +164,10 @@ Check \url{http://bms.zeugner.eu} for additional help.}
   
   # a matrix as X.data argument
   bms(matrix(rnorm(1000),100,10))
+  
+  # keeping a set of fixed regressors:
+  bms(datafls, mprior.size=7, fixed.reg = c("PrScEnroll", "LifeExp", "GDP60"))
+  # Note that mprior.size=7 means prior model size of 3 fixed to 4 'uncertain' regressors
   
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

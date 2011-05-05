@@ -1,4 +1,4 @@
-info.bma <-
+`info.bma` <-
 function (bmao) 
 {
     foo = bmao$info

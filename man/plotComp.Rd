@@ -7,27 +7,18 @@
 }
 \usage{
 plotComp(..., varNr = NULL, comp = "PIP", exact = FALSE, 
-   cex.axis = 0.45, main = NULL, type = "p", lty = 1:5, lwd = 1.5, pch = NULL, 
-   col = NULL, cex = NULL, bg = NA, xlab = "", ylab = NULL)
+   include.legend = TRUE, add.grid = TRUE, do.par = TRUE, cex.xaxis = 0.8)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{\dots}{ two or more objects of class 'bma' }
+  \item{\dots}{ one or more objects of class 'bma' to be compared. \code{plotComp} passes on any other parameters in \code{\dots} to \code{\link{matplot}}. }
   \item{varNr}{ optionally, covariate indices to be included in the plot, can be either integer vector or character vector - see examples }
   \item{comp}{ a character denoting what should be compared: \code{comp="PIP"} (default) for posterior inclusion probabilities, \code{comp="Post Mean"} for coefficients, \code{comp="Post SD"} for their standard deviations, \code{comp="Std Mean"} or standardized coefficients, or \code{comp="Std SD"} for standardized standard deviations }
   \item{exact}{ if \code{FALSE}, the statistics to be compared are based on aggregate bma statistics, if \code{TRUE}, they are based solely on the best models retained in the bma objects}
-  \item{cex.axis}{ font size parameter for the axes - see \code{\link{par}} }
-  \item{main}{ parameter for \code{\link{matplot}} - cf. \code{link{plot.default}} }
-  \item{type}{ parameter for \code{\link{matplot}}, default \code{"p"} }
-  \item{lty}{ parameter for \code{\link{matplot}}, default \code{1:5} }
-  \item{lwd}{ parameter for \code{\link{matplot}}, default \code{1} }
-  \item{pch}{ parameter for \code{\link{matplot}}, default \code{NULL} }
-  \item{col}{ parameter for \code{\link{matplot}}, default special colors }
-  \item{cex}{ parameter for \code{\link{matplot}}, default \code{NULL} }
-  \item{bg}{ parameter for \code{\link{matplot}}, default \code{NA} }
-  \item{xlab}{ parameter for \code{\link{matplot}}, default \code{""} }
-  \item{ylab}{ parameter for \code{\link{matplot}}, default argument \code{comp} }
-
+  \item{include.legend}{ whether to include a default legend in the plot (custom legends can be added with the command \code{\link{legend}}) }
+  \item{add.grid}{ whether to add a \code{\link{grid}} to the plot }
+  \item{do.par}{ whether to adjust \code{par("mar")} in order to fit in the tick labels on the x-axis }
+  \item{cex.xaxis}{ font size scaling parameter for the x-axis - cf. argument \code{cex.axis} in \code{\link{par}} }
 }
 
 \author{ Martin Feldkircher and Stefan Zeugner }
@@ -50,7 +41,7 @@ plotComp(mm1,mm2,comp="Std Mean")
 plotComp(mm1,mm2,comp="Std Mean",exact=TRUE)
 
 #plot only PIPs for first four covariates
-plotComp(mm1,mm2,varNr=1:4)
+plotComp(mm1,mm2,varNr=1:4, col=c("black","red"))
 
 #plot only coefficients for covariates 'GDP60 ' and 'LifeExp'
 plotComp(mm1,mm2,varNr=c("GDP60", "LifeExp"),comp="Post Mean")

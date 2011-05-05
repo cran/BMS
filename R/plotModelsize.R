@@ -1,6 +1,6 @@
-plotModelsize <-
+`plotModelsize` <-
 function (bmao, exact = FALSE, ksubset = NULL, include.legend = TRUE, 
-    ...) 
+    do.grid = TRUE, ...) 
 {
     dotargs = match.call(expand.dots = FALSE)$...
     if (length(exact) > 1) {
@@ -14,7 +14,7 @@ function (bmao, exact = FALSE, ksubset = NULL, include.legend = TRUE,
     if (is.element("mprior.info", names(bmao))) 
         m = bmao$mprior.info$mp.msize
     else m = bmao$arguments$prior.msize
-    pmp.10 = pmp.bma(bmao$topmod[topmodidx])
+    pmp.10 = pmp.bma(bmao$topmod[topmodidx], oldstyle = TRUE)
     if (exact) {
         modelSmean = sum(apply(.post.topmod.bma(bmao$topmod[topmodidx]), 
             2, function(x) length(which(x == 1))) * pmp.10[, 
@@ -41,12 +41,12 @@ function (bmao, exact = FALSE, ksubset = NULL, include.legend = TRUE,
         modelSmean.sq = sum(((1:length(k.vec))^2) * (k.vec/summi))
         modelS.var = modelSmean.sq - modelSmean^2
     }
-    upper = min(ceiling(modelSmean + 5 * modelS.var), K) + 1
+    upper = min(ceiling(modelSmean + 5 * modelS.var), K)
     lower = max(floor(modelSmean - 5 * modelS.var), 0)
-    if (is.element("mprior.info", names(bmao))) {
+    if (is.element("mp.Kdist", names(bmao$mprior.info))) {
         prior = bmao$mprior.info$mp.Kdist
     }
-    else {
+    else if (is.element("theta", names(bmao$arguments))) {
         theta = bmao$arguments$theta
         if (theta == "random") {
             beta.bin = function(a = 1, b = (K - m)/m, K = K, 
@@ -62,33 +62,38 @@ function (bmao, exact = FALSE, ksubset = NULL, include.legend = TRUE,
             prior = dbinom(x = 0:K, size = K, prob = m/K, log = FALSE)
         }
     }
+    else {
+        prior = rep(NA, length(kvec))
+    }
     mat = cbind(kvec, prior)
-    upper.ylim = max(kvec, prior)
+    upper.ylim = max(kvec, prior, na.rm = TRUE)
     if (is.null(ksubset)) {
-        ksubset = lower:upper
+        ksubset = (lower:upper)
     }
     dotargs = .adjustdots(dotargs, type = "l", ylim = c(0, 1.1 * 
         upper.ylim), lwd = 1.5, xaxt = "n", col = c("steelblue3", 
         "tomato"), main = paste("Posterior Model Size Distribution", 
         "\n", "Mean:", round(modelSmean, 4)), cex.main = 0.8, 
-        xlab = "Model Size", ylab = "")
-    matsubset = mat[ksubset, ]
+        xlab = "Model Size", ylab = "", lty = 1:2, pch = 4, cex.axis = 0.9)
+    matsubset = mat[ksubset + 1, ]
     eval(as.call(c(list(as.name("matplot"), as.name("matsubset")), 
         as.list(dotargs))))
-    grid()
-    points(kvec[ksubset], cex = 0.8, pch = 4)
-    if (lower == 0) {
-        axis(1, las = 1, at = 1:length(lower:upper), label = c(0:K)[lower:(upper + 
-            1)], cex.axis = 0.7)
-    }
-    else {
-        axis(1, las = 1, at = 1:length(lower:upper), label = c(0:K)[lower:upper], 
-            cex.axis = 0.7)
-    }
+    if (as.logical(do.grid)) 
+        grid()
+    points(kvec[ksubset + 1], cex = 0.8, pch = eval(dotargs$pch))
+    axis(1, las = 1, at = 1:length(ksubset), label = ksubset, 
+        cex.axis = eval(dotargs$cex.axis))
     if (include.legend) {
-        legend(x = "topright", lty = c(1, 2), legend = c("Posterior", 
-            "Prior"), col = eval(dotargs$col), ncol = 2, bty = "n", 
-            cex = 1, lwd = eval(dotargs$lwd))
+        if (is.null(prior) || all(is.na(prior))) {
+            legend(x = "topright", lty = eval(dotargs$lty), legend = c("Posterior"), 
+                col = eval(dotargs$col), ncol = 1, bty = "n", 
+                lwd = eval(dotargs$lwd))
+        }
+        else {
+            legend(x = "topright", lty = eval(dotargs$lty), legend = c("Posterior", 
+                "Prior"), col = eval(dotargs$col), ncol = 2, 
+                bty = "n", lwd = eval(dotargs$lwd))
+        }
     }
     return(invisible(list(mean = modelSmean, var = modelS.var, 
         dens = kvec)))

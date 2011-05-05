@@ -1,4 +1,4 @@
-predict.bma <-
+`predict.bma` <-
 function (object, newdata = NULL, exact = FALSE, topmodels = NULL, 
     ...) 
 {
@@ -22,7 +22,7 @@ function (object, newdata = NULL, exact = FALSE, topmodels = NULL,
         include.constant = FALSE, std.coefs = FALSE, condi.coef = FALSE)[, 
         2]
     if (is.null(newdata)) {
-        newX <- as.matrix(object$X.data[, -1])
+        newX <- as.matrix(object$X.data[, -1, drop = FALSE])
     }
     else {
         newX = as.matrix(newdata)
@@ -37,6 +37,14 @@ function (object, newdata = NULL, exact = FALSE, topmodels = NULL,
             else {
                 stop("newdata must be a matrix or data.frame with", 
                   length(betas), "columns.")
+            }
+        }
+        orinames = colnames(object$X.data[, -1, drop = FALSE])
+        if (!is.null(colnames(newX)) && !is.null(orinames)) {
+            if (all(orinames %in% colnames(newX)) && !all(orinames == 
+                colnames(newX))) {
+                warning("argument newdata had to be reordered according to its column names. Consider submitting the columns of newdata in the right order.")
+                newX = newX[, orinames, drop = FALSE]
             }
         }
     }

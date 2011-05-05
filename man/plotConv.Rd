@@ -6,12 +6,13 @@
   Plots the posterior model probabilites based on 1) marginal likelihoods and 2) MCMC frequencies for the best models in a 'bma' object and details the sampler's convergence by their correlation
 }
 \usage{
-plotConv(bmao, include.legend = TRUE, ...)
+plotConv(bmao, include.legend = TRUE, add.grid=TRUE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{bmao}{ an object of class 'bma' - see \code{\link{bms}} }
-  \item{include.legend}{ whether to include a legend in the plot }
+  \item{include.legend}{ whether to include a \code{\link{legend}} in the plot }
+  \item{add.grid}{ whether to include a \code{\link{grid}} in the plot }
   \item{\dots}{ other parameters for \code{\link{matplot}} }
 }
 \details{

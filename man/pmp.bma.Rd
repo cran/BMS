@@ -3,19 +3,20 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{ Posterior Model Probabilities }
 \description{
-  Returns the posterior models probabilites based of the best models encountered by a 'bma' object
+  Returns the posterior model probabilites for the best models encountered by a 'bma' object
 }
 \usage{
-pmp.bma(bmao)
+pmp.bma(bmao, oldstyle = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{bmao}{ A bma object (see argument \code{nmodel} in \code{\link{bms}}), alternatively an object of class 'topmod' }
+  \item{bmao}{ A bma object (see argument \code{nmodel} in \code{\link{bms}}), alternatively an object of class \code{\link{topmod}} }
+  \item{oldstyle}{ For normal use, leave this at \code{FALSE}. It is an argument for compatibility with older BMS versions - see section 'Notes' }
 }
 \value{
- the result is a matrix, its column names describe the model binaries\cr
+ the result is a matrix, its row names describe the model binaries\cr
  There are two columns in the matrix:
-  \item{PMP (Exact)}{posterior model probabilities based on the posterior likelihoods of the best models in \code{bmao}, relative to all 'best' models}
+  \item{PMP (Exact)}{posterior model probabilities based on the posterior likelihoods of the best models in \code{bmao} }
   \item{PMP (MCMC)}{posterior model probabilities of the best models in \code{bmao} based on their MCMC frequencies, relative to all models encountered by \code{bmao} - see 'Details' }
 }
 \details{
@@ -27,17 +28,20 @@ pmp.bma(bmao)
   
   The correlation of the two columns is an indicator of how well the MCMC sampler has converged to the actual PMP distribution - it is therefore also given in the output of \code{\link{summary.bma}}.
   
-  The second column thus shows the PMPs of the best models relative to all models the call to \code{\link{bms}} has sampled through (therefore typically the second column adds up to less than one).
-  However, the first column only relates to the likelihoods of the best models, therefore it adds up to 1. (the marginal likelihoods for the models not retained in the best models cannot be known).
-  
   The second column is slightly different in case the \code{\link{bms}} argument \code{mcmc} was set to \code{mcmc="enumeration"}: In this case, the second column is also based on marginal likelihoods. The correlation between the two columns is therefore one.  
   
 }
 %\references{ ~put references to the literature/web site here ~ }
 \author{ Martin Feldkircher and Stefan Zeugner }
-%\note{ ~~further notes~~ }
-
-\seealso{ \code{\link{plotConv}} for plotting, \code{\link{bms}} for sampling bma objects 
+\note{
+  The second column thus shows the PMPs of the best models relative to all models the call to \code{\link{bms}} has sampled through (therefore typically the second column adds up to less than one).
+  The first column relates to the likelihoods of the best models, therefore it would add up to 1. 
+  In order estimate for their marginal likelihoods with respect to the othe rmodels (the ones not retained in the best models), these PMP aadding up to one are multplied with the sum of PMP of the best models accroding to MCMC frequencies. 
+  Therefore, the two columns have the same column sum. 
+  
+  CAUTION: In package versions up to \code{BMS 0.2.5}, the first column was indeed set always equal to one. This behaviour can still be mimicked by setting \code{oldstyle=TRUE}.
+}
+\seealso{ \code{\link{plotConv}} for plotting \code{pmp.bma}, \code{\link{pmpmodel}} to obtain the PMP for any individual model, \code{\link{bms}} for sampling bma objects 
 
 Check \url{http://bms.zeugner.eu} for additional help.}
 
@@ -45,7 +49,7 @@ Check \url{http://bms.zeugner.eu} for additional help.}
 
 ## sample BMA for growth dataset, MCMC sampler
 data(datafls)
-mm=bms(datafls[,1:10],nmodel=20)
+mm=bms(datafls[,1:10],nmodel=20, mcmc="bd")
 
 ## mmodel likelihoods and MCMC frequencies of best 20 models
 print(mm$topmod)

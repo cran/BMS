@@ -1,4 +1,4 @@
-density.bma <-
+`density.bma` <-
 function (x, reg = NULL, addons = "lemsz", std.coefs = FALSE, 
     n = 300, plot = TRUE, hnbsteps = 30, addons.lwd = 1.5, ...) 
 {
@@ -36,7 +36,7 @@ function (x, reg = NULL, addons = "lemsz", std.coefs = FALSE,
         betas2 = diag(sddata[-1]^2) %*% betas2/sddata[1]^2
     }
     sigmadiag = (betas2 - betas^2) * (N - 3)/(N - 1)
-    pmps = pmp.bma(bmao$topmod)[, 1]
+    pmps = pmp.bma(bmao$topmod, oldstyle = TRUE)[, 1]
     pips = c(tcrossprod(bools, t(pmps)))
     Eb1 = c(tcrossprod(betas, t(pmps)))/pips
     Ebsd = sqrt(c(tcrossprod(betas2, t(pmps)))/pips - Eb1^2)
@@ -93,7 +93,7 @@ function (x, reg = NULL, addons = "lemsz", std.coefs = FALSE,
             reslist = list(x = numeric(n), y = numeric(n), n = n, 
                 call = sys.call(), data.name = names(nameix)[ix], 
                 has.na = FALSE)
-            class(reslist) = "density"
+            class(reslist) = c("density", "coef.density")
             return(reslist)
         }
         lbound = min(betas[ix, as.logical(bools[ix, ])]) - 3 * 
@@ -136,21 +136,21 @@ function (x, reg = NULL, addons = "lemsz", std.coefs = FALSE,
         if (!doplot) {
             return(reslist)
         }
+        main_default = paste("Marginal Density:", names(nameix)[ix], 
+            "(PIP", round(c(crossprod(pmps, bools[ix, ])) * 100, 
+                2), "%)")
         if (any(grep("p", addons, ignore.case = TRUE))) {
-            layout(1:2, heights = c(0.1, 1))
-            opm = par()$mar
-            par(mar = c(0, opm[2], 1, opm[4]))
-            plot(0, type = "n", xlim = 0:1, ylim = 0:1, xaxt = "n", 
-                yaxt = "n", bty = "n", xlab = "", ylab = "")
-            mtext("PIP", side = 2, las = 2)
-            rect(0, 0, 1, 1, col = 8)
-            rect(0, 0, pips[ix], 1, col = 9)
-            par(mar = opm)
+            decr = 0.12
+            parplt = par()$plt
+            parplt_temp = parplt
+            parplt_temp[4] = (1 - decr) * parplt[4] + decr * 
+                parplt[3]
+            par(plt = parplt_temp)
+            main_temp = main_default
+            main_default = NULL
         }
         dotargs = .adjustdots(dotargs, type = "l", col = "steelblue4", 
-            main = paste("Marginal Density:", names(nameix)[ix], 
-                "(PIP", round(c(crossprod(pmps, bools[ix, ])) * 
-                  100, 2), "%)"), xlab = if (std.coefs) 
+            main = main_default, xlab = if (std.coefs) 
                 "Standardized Coefficient"
             else "Coefficient", ylab = "Density")
         eval(as.call(c(list(as.name("plot"), x = as.name("seqs"), 
@@ -225,6 +225,18 @@ function (x, reg = NULL, addons = "lemsz", std.coefs = FALSE,
                 legend = leg.legend, box.lwd = 0, bty = "n", 
                 lwd = addons.lwd)
         }
+        if (any(grep("p", addons, ignore.case = TRUE))) {
+            pusr = par()$usr
+            rect(pusr[1], pusr[4] * (1 + decr * 0.2), pusr[2], 
+                pusr[4] * (1 + decr), xpd = TRUE, col = 8)
+            rect(pusr[1], pusr[4] * (1 + decr * 0.2), pips[ix] * 
+                pusr[2] + (1 - pips[ix]) * pusr[1], pusr[4] * 
+                (1 + decr), xpd = TRUE, col = 9)
+            mtext("PIP:", side = 2, las = 2, line = 1, at = pusr[4] * 
+                (1 + decr * 0.6))
+            par(plt = parplt)
+            title(main_temp)
+        }
         return(reslist)
     }
     densres = list()
@@ -244,6 +256,7 @@ function (x, reg = NULL, addons = "lemsz", std.coefs = FALSE,
     par(ask = oldask)
     if (length(densres) == 1) 
         densres = densres[[1]]
+    else class(densres) = c("coef.density", class(densres))
     if (!plot) 
         return(densres)
     if (plot & (plots == 0)) {

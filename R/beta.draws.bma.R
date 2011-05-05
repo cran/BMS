@@ -1,4 +1,4 @@
-beta.draws.bma <-
+`beta.draws.bma` <-
 function (bmao, stdev = FALSE) 
 {
     if (!is.bma(bmao)) {

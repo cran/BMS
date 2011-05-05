@@ -1,4 +1,4 @@
-gdensity <-
+`gdensity` <-
 function (x, n = 512, plot = TRUE, addons = "zles", addons.lwd = 1.5, 
     ...) 
 {
@@ -31,11 +31,10 @@ function (x, n = 512, plot = TRUE, addons = "zles", addons.lwd = 1.5,
             -1], yXdata[, 1]))), function(x) x$full.results()$ymy))
     kvec = tm$kvec_raw()
     zvec = 1 - ymyvec/yty
-    pmpexact = pmp.bma(x)[, 1]
+    pmpexact = pmp.bma(x, oldstyle = TRUE)[, 1]
     f21a = x$gprior.info$hyper.parameter
     if (length(smoments) == 0) {
-        lprob = .lprob.hyperg.init(N = N, K = K, yty = yty, f21a = f21a, 
-            return.gmoments = TRUE)
+        lprob = x$gprior.info$lprobcalc
         smoments = sapply(lapply(as.list(as.data.frame(rbind(kvec, 
             ymyvec))), function(x) lprob$lprob.all(ymy = x[2], 
             k = x[1], bhat = numeric(x[1]), diag.inverse = rep(1, 

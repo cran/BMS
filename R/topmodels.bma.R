@@ -1,4 +1,4 @@
-topmodels.bma <-
+`topmodels.bma` <-
 function (bmao) 
 {
     if (!is.bma(bmao)) {

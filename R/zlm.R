@@ -1,4 +1,4 @@
-zlm <-
+`zlm` <-
 function (formula, data = NULL, subset = NULL, g = "UIP") 
 {
     thiscall = match.call()
@@ -27,19 +27,9 @@ function (formula, data = NULL, subset = NULL, g = "UIP")
             gprior.info = g
         else stop("Please provide a proper g-prior. see help(zlm)")
     }
-    gprior.info = .choose.gprior(g = g, N = N, K = K, return.g.stats = TRUE)
-    if (gprior.info$gtype == "EBL") {
-        lprobcalc = .lprob.eblocal.init(N = N, K = K, yty = yty, 
-            return.g = gprior.info$return.g.stats)
-    }
-    else if (gprior.info$gtype == "hyper") {
-        lprobcalc = .lprob.hyperg.init(N = N, K = K, yty = yty, 
-            f21a = gprior.info$hyper.parameter, return.gmoments = gprior.info$return.g.stats)
-    }
-    else {
-        lprobcalc = .lprob.constg.init(g = gprior.info$g, N = N, 
-            K = K, yty = yty)
-    }
+    gprior.info = .choose.gprior(g = g, N = N, K = K, return.g.stats = TRUE, 
+        yty = yty)
+    lprobcalc = gprior.info$lprobcalc
     zres = lprobcalc$lprob.all(ymy = olsres$ymy, k = K, bhat = olsres$bhat, 
         diag.inverse = olsres$diag.inverse)
     betas = c(zres$b1)

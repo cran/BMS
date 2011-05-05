@@ -32,7 +32,7 @@ No methods defined with class "zlm" in the signature.
 	 \code{\link{zlm}} and \code{\link{as.zlm}} for creating \code{zlm} objects,\cr
      \code{\link{density.zlm}}, \code{\link{predict.zlm}} and \code{\link{summary.zlm}} for other posterior results 
 }
-\examples{
-showClass("zlm")
-}
+%\examples{
+%showClass("zlm")
+%}
 \keyword{classes}

@@ -1,4 +1,4 @@
-plot.bma <-
+`plot.bma` <-
 function (x, ...) 
 {
     if (!is.bma(x)) 

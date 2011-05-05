@@ -1,4 +1,4 @@
-hex2bin <-
+`hex2bin` <-
 function (hexcode) 
 {
     if (!is.character(hexcode)) 

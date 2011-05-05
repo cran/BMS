@@ -6,7 +6,7 @@
   Plots posterior and prior model size distribution
 }
 \usage{
-plotModelsize(bmao, exact = FALSE, ksubset = NULL, include.legend = TRUE, ...)
+plotModelsize(bmao, exact = FALSE, ksubset = NULL, include.legend = TRUE, do.grid = TRUE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -14,7 +14,8 @@ plotModelsize(bmao, exact = FALSE, ksubset = NULL, include.legend = TRUE, ...)
   \item{exact}{ if \code{TRUE}, then the posterior model distribution is based on the best models of \code{bmao} and their marginal likelihoods;\cr
                 if \code{FALSE} (default) then the distribution is based on all encountered models and their MCMC frequencies (cf. 'Details' in \code{\link{coef.bma}}) }
   \item{ksubset}{ integer vector detailing for which model sizes the plot should be done }
-  \item{include.legend}{ if TRUE, a small legend is included via the low-level command \code{\link{legend}} }
+  \item{include.legend}{ if \code{TRUE}, a small legend is included via the low-level command \code{\link{legend}} }
+  \item{do.grid}{ if \code{TRUE}, a \code{\link{grid}} is added to the plot (with a simple \code{grid()}). }
   \item{\dots}{ parameters passed on to \code{\link{matplot}} with sensible defaults  }
 }
 %\details{}

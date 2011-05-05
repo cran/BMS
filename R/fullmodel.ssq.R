@@ -1,4 +1,4 @@
-fullmodel.ssq <-
+`fullmodel.ssq` <-
 function (yX.data) 
 {
     if (is.bma(yX.data)) {

@@ -7,7 +7,7 @@
   Create or use an updateable list keeping the best x models it encounters (for advanced users)
 }
 \usage{
-tmo=topmod(nbmodels, nmaxregressors = NA, bbeta = FALSE, lengthfixedvec = 0, 
+topmod(nbmodels, nmaxregressors = NA, bbeta = FALSE, lengthfixedvec = 0, 
 liks = numeric(0), ncounts = numeric(0), modelbinaries = matrix(0, 0, 0), 
 betas = matrix(0, 0, 0), betas2 = matrix(0, 0, 0), fixed_vector = matrix(0, 0, 0))
 
@@ -17,7 +17,6 @@ is.topmod(tmo)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{tmo}{A 'topmod' object, as e.g. created by topmod, or as element of the result of \code{\link{bms}}}
   \item{nbmodels}{ The maximum number of models to be retained by the topmod object }
   \item{nmaxregressors}{ The maximum number of covariates the models in the topmod object are allowed to have }
   \item{bbeta}{ if \code{bbeta=TRUE}, then first and second moments of model coefficients are stored in addition to basic model statistics (Note: if \code{bbeta<0} then only the first moments are saved) }
@@ -28,6 +27,7 @@ is.topmod(tmo)
   \item{betas}{ optional matrix whose columns are coefficients to initialize topmod object with (same dimensions as \code{modelbinaries}) - see example below}
   \item{betas2}{ optional matrix whose columns are coefficients' second moments to initialize topmod object with (same dimensions as \code{modelbinaries}) - see example below }
   \item{fixed_vector}{ optional matrix whose columns are a fixed vector initialize topmod object with (same \code{ncol} as \code{modelbinaries}) - see example below }
+  \item{tmo}{A 'topmod' object, as e.g. created by topmod, or as element of the result of \code{\link{bms}}}
 }
 \details{
   A 'topmod' object (as created by \code{topmod}) holds three basic vectors: \code{lik} (for the (log) likelihood of models or similar), \code{bool()} for a hexcode presentation of the model binaries (cf. \code{\link{bin2hex}})  and ncount() for the times the models have been drawn.\cr
@@ -39,7 +39,7 @@ is.topmod(tmo)
   
   In addition, there is the possibility to save (the first moments of) coefficients of a model (\code{betas}) and their second moments (\code{betas2}), as well as an arbitrary vector of statistics per model (\code{fixed_vector}).
 
-  \code{is.topmod} returns true if the argument is of class 'topmod'
+  \code{is.topmod} returns \code{TRUE} if the argument is of class 'topmod'
 }
 \value{
   a call to \code{topmod} returns a list of class "topmod" with the following elements:

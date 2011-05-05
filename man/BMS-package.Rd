@@ -3,7 +3,7 @@
 \alias{BMS}
 \docType{package}
 \title{
-  Bayesian Model Sampling 0.2.5
+  Bayesian Model Sampling 0.3.0
 }
 \description{
 This package enables Bayesian Model Averaging over the classical normal-conjugate model with many prior options and posterior statistics.
@@ -12,25 +12,25 @@ This package enables Bayesian Model Averaging over the classical normal-conjugat
 \tabular{ll}{
 Package: \tab BMS\cr
 Type: \tab Package\cr
-Version: \tab 0.2.5\cr
-Date: \tab 2010-07-30\cr
+Version: \tab 0.3.0\cr
+Date: \tab 2011-05-05\cr
 License: \tab Artistic 2.0\cr
 }
-The most important function is \code{\link{bms}} to perform bayesian model sampling.\cr
+The most important function is \code{\link{bms}} to perform bayesian model sampling for Bayesian model Averaging or Bayesian Model Selection.\cr
 It basically offers to sample data according to different g-priors and model priors, and leaves the choice of different samplers (MCMC samplers, full or partial enumeration, and interaction samplers).\cr
 The results provide analysis into models according to MCMC frequencies, and according to the posterior likelihood of the best \code{nmodel} models (cf. \code{\link{bms}}).
 
 The functions \code{\link{coef.bma}} and \code{\link{summary.bma}} summarize the most important results.
 
-The plotting functions \code{\link{plot.bma}}, \code{\link{image.bma}}, \code{\link{density.bma}}, and \code{\link{gdensity}} are the most important plotting functions (inter alia).
+The plotting functions \code{\link{plot.bma}}, \code{\link{image.bma}}, \code{\link{density.bma}}, \code{\link{pred.density}}, and \code{\link{gdensity}} are the most important plotting functions (inter alia). Most of them also produce numerical output. 
 
-Moreover there are other functions for posterior results, such as \code{\link{beta.draws.bma}}, \code{\link{pmp.bma}}, and \code{\link{topmodels.bma}}, while \code{\link{c.bma}} helps to combine and parallelize sampling chains.
+Moreover there are other functions for posterior results, such as \code{\link{beta.draws.bma}}, \code{\link{pmp.bma}}, \code{\link{pmpmodel}}, \code{\link{post.var}}, \code{\link{post.pr2}} and \code{\link{topmodels.bma}}, while \code{\link{c.bma}} helps to combine and parallelize sampling chains.
 
-The function \code{\link{zlm}} estimates a Bayesian linear regression under Zellner's g prior, i.e. estimating a particular model without taking model uncertainty into account.
+The function \code{\link{zlm}} estimates a Bayesian linear regression under Zellner's g prior, i.e. estimating a particular model without taking model uncertainty into account. The function \code{\link{as.zlm}} may be used for model selection.
 
-Finally, the small-scale functions \code{\link{f21hyper}}, \code{\link{hex2bin}} and \code{\link{fullmodel.ssq}} provide addidtional utilities.
+Finally, the small-scale functions \code{\link{f21hyper}}, \code{\link{hex2bin}} and \code{\link{fullmodel.ssq}} provide addidtional utilities, as well as bma- and zlm-specific methods for \code{\link{variable.names}}, \code{\link{deviance}}, \code{\link{vcov}}, etc..
 
-Consider the functions \code{\link{topmod}} and as well as the internal functions \code{.choose.mprior} and \code{.choose.gprior} for more advanced programming tasks.
+Consider the function \code{\link{topmod}} for more advanced programming tasks, as well as the possibility to customize coefficient priors (\code{\link{gprior-class}}) and model priors (\code{\link{mprior-class}}).
 }
 \author{
 Martin Feldkircher and Stefan Zeugner

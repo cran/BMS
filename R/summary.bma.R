@@ -1,4 +1,4 @@
-summary.bma <-
+`summary.bma` <-
 function (object, ...) 
 {
     info.bma(object)

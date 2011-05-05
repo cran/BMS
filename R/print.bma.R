@@ -1,4 +1,4 @@
-print.bma <-
+`print.bma` <-
 function (x, ...) 
 {
     if (!is.bma(x)) {

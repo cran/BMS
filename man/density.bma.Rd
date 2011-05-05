@@ -64,9 +64,11 @@
   They correspond to the results from command \code{coef.bma(x,exact=TRUE,condi.coef=TRUE,order.by.pip=FALSE)} (cf. the example below).
   
   The low-level commands enacted by the argument \code{addons} rely on colors of the \code{\link{palette}}: color 2 for \code{"e"} and \code{"s"}, color 3 for \code{"m"}, color 8 for \code{"b"}, color 4 for \code{"E"} and \code{"S"}. The default colors may be changed by a call to \code{\link{palette}}.
+  
+  Up to BMS version 0.3.0, \code{density.bma} may only cope with built-in \code{gprior}s, not with any user-defined priors. 
 
 }
-\seealso{ \code{\link{coef.bma}} for similar concepts, \code{\link{bms}} for creating bma objects 
+\seealso{\code{\link{quantile.coef.density}} for extracting quantiles, \code{\link{coef.bma}} for similar concepts, \code{\link{bms}} for creating bma objects 
 
 Check \url{http://bms.zeugner.eu} for additional help.}
 \examples{

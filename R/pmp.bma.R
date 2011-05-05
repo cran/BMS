@@ -1,5 +1,5 @@
-pmp.bma <-
-function (bmao) 
+`pmp.bma` <-
+function (bmao, oldstyle = FALSE) 
 {
     if (!(is.bma(bmao) || is.topmod(bmao))) 
         stop("bmao needs to be a 'bma' object!")
@@ -25,8 +25,12 @@ function (bmao)
         lt2 = topmods$ncount()/cumsumweights
     }
     cpoint = min(length(lt1), length(lt2))
-    topmod = rbind(lt1[1:cpoint], lt2[1:cpoint])
-    rownames(topmod) = c("PMP (Exact)", "PMP (MCMC)")
-    colnames(topmod) = topmods$bool()
-    return(t(topmod))
+    lt1 = lt1[1:cpoint]
+    lt2 = lt2[1:cpoint]
+    if (!oldstyle) 
+        lt1 <- lt1 * sum(lt2)
+    topmodout = rbind(lt1, lt2)
+    rownames(topmodout) = c("PMP (Exact)", "PMP (MCMC)")
+    colnames(topmodout) = topmods$bool()
+    return(t(topmodout))
 }

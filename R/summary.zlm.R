@@ -1,4 +1,4 @@
-summary.zlm <-
+`summary.zlm` <-
 function (object, printout = TRUE, ...) 
 {
     betas = object$coefficients

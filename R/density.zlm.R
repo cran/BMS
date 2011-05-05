@@ -1,4 +1,4 @@
-density.zlm <-
+`density.zlm` <-
 function (x, reg = NULL, addons = "lesz", std.coefs = FALSE, 
     n = 300, plot = TRUE, hnbsteps = 30, addons.lwd = 1.5, ...) 
 {

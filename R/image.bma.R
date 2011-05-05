@@ -1,4 +1,4 @@
-image.bma <-
+`image.bma` <-
 function (x, yprop2pip = FALSE, order.by.pip = TRUE, do.par = TRUE, 
     do.grid = TRUE, do.axis = TRUE, cex.axis = 1, ...) 
 {
@@ -8,7 +8,7 @@ function (x, yprop2pip = FALSE, order.by.pip = TRUE, do.par = TRUE,
     ests = ests[nrow(ests):1, ]
     pips = ests[, "PIP"]
     idx = ests[, "Idx"]
-    pmp.res = pmp.bma(x)
+    pmp.res = pmp.bma(x, oldstyle = TRUE)
     pmps = pmp.res[, 1]
     normali_factor = sum(pmp.res[, 2])
     betasigns = beta.draws.bma(x)[idx, , drop = FALSE]
@@ -26,8 +26,12 @@ function (x, yprop2pip = FALSE, order.by.pip = TRUE, do.par = TRUE,
     pmpbounds = (c(0, cumsum(pmps)))
     if (do.par) {
         oldmar = par()$mar
-        par(mar = c(5, min(20, max(nchar(names(pipbounds))))/2, 
-            2, 2))
+        spaceforyaxis = strwidth(names(pipbounds)[which.max(nchar(names(pipbounds)))], 
+            unit = "inches") * (par("mar")/par("mai"))[[2]]
+        tempmar = oldmar
+        tempmar[2] = min(spaceforyaxis + oldmar[2]/2, 0.5 * par("fin")[[1]] * 
+            (par("mar")/par("mai"))[[2]])
+        par(mar = tempmar)
     }
     dotargs = .adjustdots(dotargs, ylab = "", xlab = "Cumulative Model Probabilities", 
         col = c("tomato", "blue"), main = paste("Model Inclusion Based on Best ", 

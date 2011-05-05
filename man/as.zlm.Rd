@@ -15,7 +15,8 @@ A numeric or logical vector of length K describing which covariates are containe
 A hexcode character describing which covariates are contained in the model
  }
 }
-\details{ A bma object stores several 'best' models it encounters (cf. argument \code{nmodel} in \code{\link{bms}}). \code{as.zlm} extracts a single model and converts it to an object of class \code{\link{zlm}}, which represents a linear model estimated under Zellner's g prior.}
+\details{ A bma object stores several 'best' models it encounters (cf. argument \code{nmodel} in \code{\link{bms}}). \code{as.zlm} extracts a single model and converts it to an object of class \code{\link{zlm}}, which represents a linear model estimated under Zellner's g prior.\cr
+The utility \code{\link{model.frame}} allows to transfrom a \code{zlm} model into an OLS model of class \code{\link{lm}}.}
 \value{ a list of class \code{\link{zlm}}}
 \author{
 Stefan Zeugner
@@ -34,12 +35,19 @@ topmodels.bma(mm)[,1:5] #display the best 5 models
 m2a=as.zlm(mm,4) #extract the fourth best model
 summary(m2a)
 
+# Bayesian Model Selection:
+# transform the best model into an OLS model:
+lm(model.frame(as.zlm(mm)))
+
 # extract the model only containing the 5th regressor
 m2b=as.zlm(mm,c(0,0,0,0,1)) 
 
 # extract the model only containing the 5th regressor in hexcode
 print(bin2hex(c(0,0,0,0,1)))
 m2c=as.zlm(mm,"01")
+
+
+
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
