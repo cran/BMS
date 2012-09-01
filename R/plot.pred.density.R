@@ -1,4 +1,4 @@
-`plot.pred.density` <-
+plot.pred.density <-
 function (x, predict_index = NULL, addons = "eslz", realized.y = NULL, 
     addons.lwd = 1.5, ...) 
 {

@@ -1,4 +1,4 @@
-`quantile.density` <-
+quantile.density <-
 function (x, probs = seq(0.25, 0.75, 0.25), names = TRUE, normalize = TRUE, 
     ...) 
 {

@@ -12,12 +12,12 @@ invisible(readline("hit <Return> to do estimate a short BMA MC3 sampling chain."
 invisible(readline("Hit <Return> for some low-level functions."))
 
 # some results:
- info.bma(mfls)
-# info.bma() shows basic aggregate results from MC3 sampling 
+ summary(mfls)
+# summary.bma() shows basic aggregate results from MC3 sampling 
 
 invisible(readline("Hit <Return> for functions on the coefficients."))
- estimates.bma(mfls)
- #based on MCMC frequencies, this shows 
+ coef(mfls)
+ #based on MCMC frequencies, coef.bma shows 
  # the posterior inclusion probabilities (column 1),
  # the unconditional expecteded value of coefficients (column 2),
  # their standard deviations (column 3),
@@ -25,8 +25,8 @@ invisible(readline("Hit <Return> for functions on the coefficients."))
  # (conditional on inclusion, column 4) 
 
 invisible(readline("Hit <Return> for a different version.")) 
- estimates.bma(mfls,exact=T,std.coefs=T) 
- #this is similar to estimates.bma(), 
+ coef(mfls,exact=T,std.coefs=T) 
+ #this is similar to coef.bma(), 
  # however here the numbers are based on the exact marginal 
  # likelihoods of the best (100) models drawn. 
  # Moreover the coefficents are shown in standardized form.
@@ -45,7 +45,7 @@ mfls[3]$topmod
 
 
 invisible(readline("Hit <Return> for some plots ")) 
-oldask=par()$ask;par(ask=TRUE)
+invisible(par(ask=TRUE))
   density(mfls,reg="BlMktPm")
 #plot density for regressor "BlMktPm"
 
@@ -62,4 +62,4 @@ oldask=par()$ask;par(ask=TRUE)
  plot(mfls)
  #a combined plot
  
-par(ask=oldask); rm(oldask)
+invisible(par(ask=FALSE))

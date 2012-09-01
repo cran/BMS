@@ -1,4 +1,4 @@
-`as.zlm` <-
+as.zlm <-
 function (bmao, model = 1) 
 {
     thiscall = match.call()

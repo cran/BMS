@@ -1,4 +1,4 @@
-`plotModelsize` <-
+plotModelsize <-
 function (bmao, exact = FALSE, ksubset = NULL, include.legend = TRUE, 
     do.grid = TRUE, ...) 
 {
@@ -81,7 +81,7 @@ function (bmao, exact = FALSE, ksubset = NULL, include.legend = TRUE,
     if (as.logical(do.grid)) 
         grid()
     points(kvec[ksubset + 1], cex = 0.8, pch = eval(dotargs$pch))
-    axis(1, las = 1, at = 1:length(ksubset), label = ksubset, 
+    axis(1, las = 1, at = 1:length(ksubset), labels = ksubset, 
         cex.axis = eval(dotargs$cex.axis))
     if (include.legend) {
         if (is.null(prior) || all(is.na(prior))) {

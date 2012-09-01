@@ -1,4 +1,4 @@
-`vcov.zlm` <-
+vcov.zlm <-
 function (object, include.const = FALSE, ...) 
 {
     Xmat = as.matrix(model.frame(object)[, -1, drop = FALSE])

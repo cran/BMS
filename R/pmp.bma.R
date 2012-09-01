@@ -1,4 +1,4 @@
-`pmp.bma` <-
+pmp.bma <-
 function (bmao, oldstyle = FALSE) 
 {
     if (!(is.bma(bmao) || is.topmod(bmao))) 

@@ -1,4 +1,4 @@
-`predict.bma` <-
+predict.bma <-
 function (object, newdata = NULL, exact = FALSE, topmodels = NULL, 
     ...) 
 {

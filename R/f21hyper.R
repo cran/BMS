@@ -1,4 +1,4 @@
-`f21hyper` <-
+f21hyper <-
 function (a, b, c, z) 
 {
     if ((length(a) != 1) | (length(b) != 1) | (length(c) != 1) | 

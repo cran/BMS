@@ -1,4 +1,4 @@
-`deviance.bma` <-
+deviance.bma <-
 function (object, exact = FALSE, ...) 
 {
     if (is.bma(object)) {

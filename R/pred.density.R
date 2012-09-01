@@ -1,4 +1,4 @@
-`pred.density` <-
+pred.density <-
 function (object, newdata = NULL, n = 300, hnbsteps = 30, ...) 
 {
     dtcm = function(x, df, ncp, varp) {
@@ -83,8 +83,7 @@ function (object, newdata = NULL, n = 300, hnbsteps = 30, ...)
             }
             if (dim(symmat)[[1]] == 0) 
                 return(matrix(numeric(0), 0, 0))
-            return(.Call("La_chol2inv", .Call("La_chol", symmat, 
-                PACKAGE = "base"), size = ndim, PACKAGE = "base"))
+            return(chol2inv(chol(symmat), size = ndim))
         }
         boolvec = as.logical(hexobject$as.binvec(hex))
         if (!any(boolvec)) 

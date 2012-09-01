@@ -1,4 +1,4 @@
-`plotConv` <-
+plotConv <-
 function (bmao, include.legend = TRUE, add.grid = TRUE, ...) 
 {
     if (!is.bma(bmao)) 

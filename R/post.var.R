@@ -1,4 +1,4 @@
-`post.var` <-
+post.var <-
 function (object, exact = FALSE) 
 {
     if (!(is.bma(object) | is(object, "lm"))) 

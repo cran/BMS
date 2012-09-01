@@ -1,4 +1,4 @@
-`variable.names.bma` <-
+variable.names.bma <-
 function (object, ...) 
 {
     if (!is.bma(object)) 

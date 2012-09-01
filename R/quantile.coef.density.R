@@ -1,4 +1,4 @@
-`quantile.coef.density` <-
+quantile.coef.density <-
 function (x, probs = seq(0.25, 0.75, 0.25), names = TRUE, ...) 
 {
     quout = .quantile.density(x, probs = probs, names = names, 

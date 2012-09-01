@@ -1,4 +1,4 @@
-`topmod` <-
+topmod <-
 function (nbmodels, nmaxregressors = NA, bbeta = FALSE, lengthfixedvec = 0, 
     liks = numeric(0), ncounts = numeric(0), modelbinaries = matrix(0, 
         0, 0), betas = matrix(0, 0, 0), betas2 = matrix(0, 0, 

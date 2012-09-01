@@ -1,4 +1,4 @@
-`predict.zlm` <-
+predict.zlm <-
 function (object, newdata = NULL, se.fit = FALSE, ...) 
 {
     if (!is(object, "zlm")) {

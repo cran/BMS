@@ -1,4 +1,4 @@
-`pmpmodel` <-
+pmpmodel <-
 function (bmao, model = numeric(0), exact = TRUE) 
 {
     if (!is.bma(bmao)) 

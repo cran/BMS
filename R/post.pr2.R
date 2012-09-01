@@ -1,4 +1,4 @@
-`post.pr2` <-
+post.pr2 <-
 function (object, exact = FALSE) 
 {
     if (!(is.bma(object) | is(object, "lm"))) 

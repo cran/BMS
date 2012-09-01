@@ -1,4 +1,4 @@
-`logLik.zlm` <-
+logLik.zlm <-
 function (object, ...) 
 {
     if (!is(object, "zlm")) 

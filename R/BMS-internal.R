@@ -1,4 +1,4 @@
-`.addup.enum` <-
+.addup.enum <-
 function () 
 {
     weight = exp(pmpold + lprobold - null.lik)
@@ -14,7 +14,7 @@ function ()
         null.count <<- null.count + weight
     }
 }
-`.addup.enum.wotherstats` <-
+.addup.enum.wotherstats <-
 function () 
 {
     weight = exp(pmpold + lprobold - null.lik)
@@ -32,7 +32,7 @@ function ()
     otherstats <<- lik.list[["otherstats"]]
     add.otherstats <<- add.otherstats + weight * otherstats
 }
-`.addup.mcmc` <-
+.addup.mcmc <-
 function () 
 {
     inccount <<- inccount + molddraw
@@ -46,7 +46,7 @@ function ()
         null.count <<- null.count + 1
     }
 }
-`.addup.mcmc.wotherstats` <-
+.addup.mcmc.wotherstats <-
 function () 
 {
     inccount <<- inccount + molddraw
@@ -62,7 +62,7 @@ function ()
     otherstats <<- lik.list[["otherstats"]]
     add.otherstats <<- add.otherstats + otherstats
 }
-`.adjustdots` <-
+.adjustdots <-
 function (dotargs, ...) 
 {
     defargs = list(...)
@@ -78,7 +78,7 @@ function (dotargs, ...)
     }
     return(dotargs)
 }
-`.choose.gprior` <-
+.choose.gprior <-
 function (g, N, K, return.g.stats = FALSE, yty = N, ...) 
 {
     if (is.list(g)) {
@@ -116,7 +116,7 @@ function (g, N, K, return.g.stats = FALSE, yty = N, ...)
     return(.gprior.constg.init(g = g, return.g.stats = return.g.stats, 
         N = N, K = K, yty = yty))
 }
-`.choose.mprior` <-
+.choose.mprior <-
 function (mpmode, mpparam, K, ..., fixed.pos = numeric(0)) 
 {
     origargs = list(mpmode = mpmode, mpparam = mpparam)
@@ -167,7 +167,7 @@ function (mpmode, mpparam, K, ..., fixed.pos = numeric(0))
     class(mpinfo) <- c("mprior", class(mpinfo))
     return(mpinfo)
 }
-`.constr.intmat` <-
+.constr.intmat <-
 function (X, K) 
 {
     intix = grep("#", colnames(X), fixed = TRUE)
@@ -180,7 +180,7 @@ function (X, K)
     }
     return(mPlus)
 }
-`.construct.arglist` <-
+.construct.arglist <-
 function (funobj, envir = NULL) 
 {
     namedlist = formals(funobj)
@@ -198,7 +198,7 @@ function (funobj, envir = NULL)
     }
     return(namedlist)
 }
-`.cor.topmod` <-
+.cor.topmod <-
 function (tmo) 
 {
     if (is.bma(tmo)) 
@@ -215,7 +215,7 @@ function (tmo)
     }
     return(corr.pmp)
 }
-`.enum_fromindex` <-
+.enum_fromindex <-
 function (lindex) 
 {
     lindex = lindex[[1]]
@@ -224,7 +224,7 @@ function (lindex)
     log2 = ceiling(log(lindex + 1, 2))
     return(as.logical((lindex + 2^((log2 - 1):0))%/%(2^(log2:1))%%2))
 }
-`.enum_startend` <-
+.enum_startend <-
 function (iter = NA, start.value = 0, K = 1, maxk = K, fixed.pos = numeric(0)) 
 {
     fixed.pos = {
@@ -266,7 +266,7 @@ function (iter = NA, start.value = 0, K = 1, maxk = K, fixed.pos = numeric(0))
     iter = min(iter, 2^effk - 1 - start.value2)
     return(list(start.value = start.value, iter = iter))
 }
-`.f21_4hyperg` <-
+.f21_4hyperg <-
 function (N, K, f21a, ltermbounds = c(200, 600, 1400, 3000)) 
 {
     create.lterms = function(cc) lapply(as.list(ltermbounds), 
@@ -285,13 +285,13 @@ function (N, K, f21a, ltermbounds = c(200, 600, 1400, 3000))
             1)
     }))
 }
-`.f21simple` <-
+.f21simple <-
 function (a, c, z) 
 {
     f21o = .f21_4hyperg(2 * a + 1, 0, c * 2)
     f21o$calcit(z, 0)
 }
-`.fixedset.mprior` <-
+.fixedset.mprior <-
 function (mprior.function, fullK, fixed.pos = numeric(0), K = NA, 
     ...) 
 {
@@ -312,7 +312,7 @@ function (mprior.function, fullK, fixed.pos = numeric(0), K = NA,
     }, mp.Kdist = c(numeric(fixk), mprior$mp.Kdist))
     return(mpl)
 }
-`.fixedset.sampler` <-
+.fixedset.sampler <-
 function (sampler.function, fullK, fixed.pos = numeric(0), ...) 
 {
     if (length(fixed.pos) == 0) 
@@ -345,15 +345,15 @@ function (sampler.function, fullK, fixed.pos = numeric(0), ...)
     }
     return(outfun)
 }
-`.fls.samp` <-
+.fls.samp <-
 function (molddraw = molddraw, K = K, ..., maxk = Inf, oldk = 0) 
 {
-    indch <- ceiling(.Internal(runif(1, 0, K)))
+    indch <- ceiling(runif(1, 0, K))
     bdropit <- as.logical(molddraw[[indch]])
     if (oldk == maxk) 
         if (!bdropit) {
-            indch = (1:K)[molddraw == 1][[ceiling(.Internal(runif(1, 
-                0, sum(molddraw))))]]
+            indch = (1:K)[molddraw == 1][[ceiling(runif(1, 0, 
+                sum(molddraw)))]]
             bdropit = molddraw[[indch]]
         }
     if (bdropit) {
@@ -372,11 +372,11 @@ function (molddraw = molddraw, K = K, ..., maxk = Inf, oldk = 0)
     return(list(mnewdraw = molddraw, positionnew = positionnew, 
         addi = addvar, dropi = dropvar))
 }
-`.fls.samp.int` <-
+.fls.samp.int <-
 function (molddraw = molddraw, K = K, mPlus = mPlus, maxk = Inf, 
     oldk = 0) 
 {
-    indch = ceiling(.Internal(runif(1, 0, 1)) * (K))
+    indch = ceiling(runif(1, 0, 1) * K)
     if (molddraw[indch] == 1) {
         mnewdraw = as.numeric(molddraw > mPlus[, indch])
         dropvar = (1:K)[xor(molddraw, mnewdraw)]
@@ -397,7 +397,7 @@ function (molddraw = molddraw, K = K, mPlus = mPlus, maxk = Inf,
             addi = addvar, dropi = dropvar))
     }
 }
-`.getpolycoefs` <-
+.getpolycoefs <-
 function (polyroots) 
 {
     if (length(polyroots) == 1) 
@@ -405,7 +405,7 @@ function (polyroots)
     restterms = .getpolycoefs(polyroots[-1])
     c(restterms, 0) + c(0, polyroots[1] * restterms)
 }
-`.gprior.constg.init` <-
+.gprior.constg.init <-
 function (g = NA, return.g.stats = TRUE, N = N, K = K, yty = 1, 
     null.lik = NA, ...) 
 {
@@ -481,7 +481,7 @@ function (g = NA, return.g.stats = TRUE, N = N, K = K, yty = 1,
     class(gprior.info) <- c("gprior", class(gprior.info))
     return(gprior.info)
 }
-`.gprior.eblocal.init` <-
+.gprior.eblocal.init <-
 function (g = NA, return.g.stats = TRUE, N = N, K = K, yty = 1, 
     null.lik = NA, ...) 
 {
@@ -582,7 +582,7 @@ function (g = NA, return.g.stats = TRUE, N = N, K = K, yty = 1,
     class(gprior.info) <- c("gprior", class(gprior.info))
     return(gprior.info)
 }
-`.gprior.hyperg.init` <-
+.gprior.hyperg.init <-
 function (g = NA, return.g.stats = TRUE, N = N, K = K, yty = 1, 
     null.lik = NA, ...) 
 {
@@ -708,7 +708,7 @@ function (g = NA, return.g.stats = TRUE, N = N, K = K, yty = 1,
     class(gprior.info) <- c("gprior", class(gprior.info))
     return(gprior.info)
 }
-`.hexcode.binvec.convert` <-
+.hexcode.binvec.convert <-
 function (length.of.binvec) 
 {
     if (length(length.of.binvec) > 1) 
@@ -716,10 +716,10 @@ function (length.of.binvec)
     addpositions = 4 - length.of.binvec%%4
     positionsby4 = (length.of.binvec + addpositions)/4
     hexvec = c(0:9, "a", "b", "c", "d", "e", "f")
-    hexcodelist = list("0" = numeric(4), "1" = c(0, 0, 0, 1), 
-        "2" = c(0, 0, 1, 0), "3" = c(0, 0, 1, 1), "4" = c(0, 
-            1, 0, 0), "5" = c(0, 1, 0, 1), "6" = c(0, 1, 1, 0), 
-        "7" = c(0, 1, 1, 1), "8" = c(1, 0, 0, 0), "9" = c(1, 
+    hexcodelist = list(`0` = numeric(4), `1` = c(0, 0, 0, 1), 
+        `2` = c(0, 0, 1, 0), `3` = c(0, 0, 1, 1), `4` = c(0, 
+            1, 0, 0), `5` = c(0, 1, 0, 1), `6` = c(0, 1, 1, 0), 
+        `7` = c(0, 1, 1, 1), `8` = c(1, 0, 0, 0), `9` = c(1, 
             0, 0, 1), a = c(1, 0, 1, 0), b = c(1, 0, 1, 1), c = c(1, 
             1, 0, 0), d = c(1, 1, 0, 1), e = c(1, 1, 1, 0), f = c(1, 
             1, 1, 1))
@@ -733,7 +733,7 @@ function (length.of.binvec)
             recursive = FALSE, use.names = FALSE)[-(1:addpositions)])
     }))
 }
-`.iterenum` <-
+.iterenum <-
 function (molddraw = numeric(0), K = length(molddraw), ...) 
 {
     even.lead1 = {
@@ -751,7 +751,7 @@ function (molddraw = numeric(0), K = length(molddraw), ...)
         1:K
     }[as.logical(molddraw)], addi = addi, dropi = dropi))
 }
-`.iterenum.bone` <-
+.iterenum.bone <-
 function (molddraw = numeric(0), maxk = Inf) 
 {
     even.lead1 = ((1:length(molddraw))[!(cumsum(molddraw)%%2)])
@@ -761,7 +761,7 @@ function (molddraw = numeric(0), maxk = Inf)
         return(.iterenum.bone(molddraw, maxk))
     else return(molddraw)
 }
-`.iterenum.KgtN` <-
+.iterenum.KgtN <-
 function (molddraw = numeric(0), maxk = Inf, oldk = 0, ...) 
 {
     mnewdraw = .iterenum.bone(molddraw = molddraw, maxk)
@@ -774,25 +774,25 @@ function (molddraw = numeric(0), maxk = Inf, oldk = 0, ...)
     return(list(mnewdraw = mnewdraw, positionnew = (1:length(mnewdraw))[as.logical(mnewdraw)], 
         addi = addi, dropi = dropi))
 }
-`.lprob.constg.init` <-
+.lprob.constg.init <-
 function (...) 
 {
     gpo = .gprior.constg.init(...)
     return(gpo$lprobcalc)
 }
-`.lprob.eblocal.init` <-
+.lprob.eblocal.init <-
 function (...) 
 {
     gpo = .gprior.eblocal.init(...)
     return(gpo$lprobcalc)
 }
-`.lprob.hyperg.init` <-
+.lprob.hyperg.init <-
 function (...) 
 {
     gpo = .gprior.hyperg.init(...)
     return(gpo$lprobcalc)
 }
-`.mprior.customk.init` <-
+.mprior.customk.init <-
 function (K, mpparam, ...) 
 {
     if (any(is.na(mpparam))) 
@@ -812,7 +812,7 @@ function (K, mpparam, ...)
     }, mp.Kdist = choose(K, 0:K) * mpparam/sum(choose(K, 0:K) * 
         mpparam)))
 }
-`.mprior.fixedt.init` <-
+.mprior.fixedt.init <-
 function (K, mpparam, ...) 
 {
     if (is.na(mpparam[1])) 
@@ -830,7 +830,7 @@ function (K, mpparam, ...)
         return(post.odds1)
     }, mp.Kdist = dbinom(x = 0:K, size = K, prob = m/K, log = FALSE)))
 }
-`.mprior.pip.init` <-
+.mprior.pip.init <-
 function (K, mpparam, ...) 
 {
     if (any(is.na(mpparam))) 
@@ -851,7 +851,7 @@ function (K, mpparam, ...)
         1 - mpparam
     }) * prod(1 - mpparam)))
 }
-`.mprior.randomt.init` <-
+.mprior.randomt.init <-
 function (K, mpparam, ...) 
 {
     if (is.na(mpparam[1])) 
@@ -877,13 +877,13 @@ function (K, mpparam, ...)
         K - m
     }/m, K = K, w = 0:K))))
 }
-`.mprior.uniform.init` <-
+.mprior.uniform.init <-
 function (K, ...) 
 {
     return(list(mp.mode = "uniform", mp.msize = K/2, pmp = function(...) return(0), 
         mp.Kdist = exp(lchoose(K, 0:K) - K * log(2))))
 }
-`.ols.terms2` <-
+.ols.terms2 <-
 function (positions, yty, k = NULL, N = N, K = K, XtX.big = XtX.big, 
     Xty.big = Xty.big, ...) 
 {
@@ -891,8 +891,7 @@ function (positions, yty, k = NULL, N = N, K = K, XtX.big = XtX.big,
         if (!is.matrix(symmat)) {
             symmat = as.matrix(symmat)
         }
-        return(.Call("La_chol2inv", .Call("La_chol", symmat, 
-            PACKAGE = "base"), size = ndim, PACKAGE = "base"))
+        return(chol2inv(chol(symmat), size = ndim))
     }
     if (is.null(k)) 
         k = length(positions)
@@ -908,8 +907,8 @@ function (positions, yty, k = NULL, N = N, K = K, XtX.big = XtX.big,
         XtX <- XtX.big[positions, positions, drop = FALSE]
         Xty <- Xty.big[positions]
         XtXinv <- syminv(XtX, ndim = k)
-        bhat <- .Internal(crossprod(XtXinv, Xty))
-        ymy <- yty - .Internal(crossprod(Xty, bhat))[[1]]
+        bhat <- crossprod(XtXinv, Xty)
+        ymy <- yty - crossprod(Xty, bhat)[[1]]
     }
     return(list(full.results = function() {
         return(list(ymy = ymy, bhat = bhat, diag.inverse = XtXinv[1:k + 
@@ -925,12 +924,12 @@ function (positions, yty, k = NULL, N = N, K = K, XtX.big = XtX.big,
             poshere = positions[-jhere]
             Xj = XtXinv[, jhere]
             Xtxi = XtX.big[poshere, addix]
-            bxlessj = .Internal(crossprod(XtXinv, XtX.big[positions, 
-                addix])) - Xj * XtX.big[addix, dropix]
+            bxlessj = crossprod(XtXinv, XtX.big[positions, addix]) - 
+                Xj * XtX.big[addix, dropix]
             bhatx = bxlessj[-jhere] - Xj[-jhere] * bxlessj[jhere]/Xj[jhere]
             child.ymy = ymy + bhat[jhere]^2/Xj[jhere] - {
-                Xty.big[addix] - .Internal(crossprod(Xty.big[poshere], 
-                  bhatx))[[1]]
+                Xty.big[addix] - crossprod(Xty.big[poshere], 
+                  bhatx)[[1]]
             }^2/{
                 XtX.big[addix, addix] - crossprod(bhatx, Xtxi)[[1]]
             }
@@ -947,11 +946,9 @@ function (positions, yty, k = NULL, N = N, K = K, XtX.big = XtX.big,
                 Xtxi = XtX.big[positions, addix]
                 bhatx = crossprod(XtXinv, Xtxi)[, 1]
                 child.ymy = ymy - {
-                  Xty.big[addix] - .Internal(crossprod(bhatx, 
-                    Xty))[[1]]
+                  Xty.big[addix] - crossprod(bhatx, Xty)[[1]]
                 }^2/{
-                  XtX.big[addix, addix] - .Internal(crossprod(bhatx, 
-                    Xtxi))[[1]]
+                  XtX.big[addix, addix] - crossprod(bhatx, Xtxi)[[1]]
                 }
                 return(child.ymy)
             }
@@ -973,21 +970,19 @@ function (positions, yty, k = NULL, N = N, K = K, XtX.big = XtX.big,
                   Xty <<- Xty[-jhere]
                   Xj = XtXinv[, jhere]
                   XtXinv <<- {
-                    XtXinv - .Internal(tcrossprod(Xj/Xj[jhere], 
-                      Xj))
+                    XtXinv - tcrossprod(Xj/Xj[jhere], Xj)
                   }[-jhere, -jhere]
                 } else {
                   jhere = sum(positions < addix) + 1
                   Xtxx = XtX.big[addix, newpos]
                   Xtx = Xtxx[-jhere]
                   Xty <<- Xty.big[newpos]
-                  bhatx = .Internal(crossprod(XtXinv, Xtx))[, 
-                    1]
+                  bhatx = crossprod(XtXinv, Xtx)[, 1]
                   bhatxadj = c(bhatx[0:(jhere - 1)], -1, bhatx[jhere:k])
                   if (jhere == newk) bhatxadj = bhatxadj[-(jhere + 
                     1:2)]
-                  newinv = .Internal(tcrossprod(bhatxadj, bhatxadj/(Xtxx[jhere] - 
-                    .Internal(crossprod(Xtx, bhatx))[[1]])))
+                  newinv = tcrossprod(bhatxadj, bhatxadj/(Xtxx[jhere] - 
+                    crossprod(Xtx, bhatx)[[1]]))
                   newinv[-jhere, -jhere] = newinv[-jhere, -jhere] + 
                     XtXinv
                   XtXinv <<- newinv
@@ -996,8 +991,8 @@ function (positions, yty, k = NULL, N = N, K = K, XtX.big = XtX.big,
         }
         positions <<- newpos
         k <<- newk
-        bhat <<- .Internal(crossprod(XtXinv, Xty))[, 1]
-        ymy <<- yty - .Internal(crossprod(Xty, bhat))[[1]]
+        bhat <<- crossprod(XtXinv, Xty)[, 1]
+        ymy <<- yty - crossprod(Xty, bhat)[[1]]
         return(list(ymy = ymy, bhat = bhat, diag.inverse = XtXinv[1:k + 
             0:{
                 k - 1
@@ -1007,7 +1002,7 @@ function (positions, yty, k = NULL, N = N, K = K, XtX.big = XtX.big,
             k - 1
         } * k]))
 }
-`.post.beta.draws` <-
+.post.beta.draws <-
 function (topmods, reg.names, moment2 = FALSE) 
 {
     if (moment2) 
@@ -1032,7 +1027,7 @@ function (topmods, reg.names, moment2 = FALSE)
     }
     return(beta.draws)
 }
-`.post.calc` <-
+.post.calc <-
 function (gprior.info, add.otherstats, k.vec, null.count, X.data, 
     topmods, b1mo, b2mo, iter, burn, inccount, models.visited, 
     K, N, msize, timed, cumsumweights = NA, mcmc = "bd", possign = NA) 
@@ -1086,14 +1081,14 @@ function (gprior.info, add.otherstats, k.vec, null.count, X.data,
     return(list(info = info.object, k.vec = k.vec, cons = cons, 
         gprior.info = gprior.info, pmp.10 = pmp.10, reg.names = reg.names))
 }
-`.post.constant` <-
+.post.constant <-
 function (X.data, Ebeta) 
 {
     Xmeans = colMeans(X.data)
     cons = Xmeans[1] - crossprod(Ebeta, Xmeans[-1])
     return(as.vector(cons))
 }
-`.post.estimates` <-
+.post.estimates <-
 function (b1mo = NULL, b2mo = NULL, cumsumweights = NULL, inccount = NULL, 
     topmods = NULL, X.data = NULL, reg.names = NULL, pos.sign = NULL, 
     exact = FALSE, order.by.pip = TRUE, include.constant = FALSE, 
@@ -1133,7 +1128,7 @@ function (b1mo = NULL, b2mo = NULL, cumsumweights = NULL, inccount = NULL,
         Ebsd[is.nan(Ebsd)] = 0
     }
     if (std.coefs) {
-        sddata = stats::sd(X.data)
+        sddata = apply(as.matrix(X.data), 2, stats::sd)
         Eb1 = Eb1/sddata[1] * sddata[-1]
         Ebsd = Ebsd/sddata[1] * sddata[-1]
         if (include.constant) 
@@ -1162,7 +1157,7 @@ function (b1mo = NULL, b2mo = NULL, cumsumweights = NULL, inccount = NULL,
     }
     return(post.mean)
 }
-`.post.topmod.bma` <-
+.post.topmod.bma <-
 function (topmods, reg.names = numeric(0)) 
 {
     pmps = pmp.bma(topmods)
@@ -1172,7 +1167,7 @@ function (topmods, reg.names = numeric(0))
     }
     rbind(.post.topmod.includes(topmods, reg.names), t(pmps))
 }
-`.post.topmod.includes` <-
+.post.topmod.includes <-
 function (topmods, reg.names) 
 {
     topmod = topmods$bool_binary()
@@ -1180,7 +1175,7 @@ function (topmods, reg.names)
     rownames(topmod) = reg.names
     return(topmod)
 }
-`.quantile.density` <-
+.quantile.density <-
 function (x, probs = seq(0.25, 0.75, 0.25), names = TRUE, normalize = TRUE, 
     ...) 
 {
@@ -1231,10 +1226,10 @@ function (x, probs = seq(0.25, 0.75, 0.25), names = TRUE, normalize = TRUE,
             digits = max(2L, getOption("digits"))), "%", sep = "")
     return(qout)
 }
-`.rev.jump` <-
+.rev.jump <-
 function (molddraw = molddraw, K = K, ..., maxk = Inf, oldk = 0) 
 {
-    rev.idx = ceiling(.Internal(runif(1, 0, 2)))
+    rev.idx = ceiling(runif(1, 0, 2))
     if (rev.idx == 1) {
         birth.death = .fls.samp(molddraw = molddraw, K = K, maxk = maxk, 
             oldk = oldk)
@@ -1246,10 +1241,9 @@ function (molddraw = molddraw, K = K, ..., maxk = Inf, oldk = 0)
     if (rev.idx == 2) {
         var.in = (1:K)[as.logical(molddraw)]
         var.out = (1:K)[!as.logical(molddraw)]
-        var.in.rand = ceiling(length(var.in) * .Internal(runif(1, 
-            0, 1)))
-        addvar = var.out[ceiling(length(var.out) * .Internal(runif(1, 
-            0, 1)))]
+        var.in.rand = ceiling(length(var.in) * runif(1, 0, 1))
+        addvar = var.out[ceiling(length(var.out) * runif(1, 0, 
+            1))]
         dropvar = var.in[var.in.rand]
         mnewdraw = molddraw
         mnewdraw[addvar] = 1
@@ -1261,11 +1255,11 @@ function (molddraw = molddraw, K = K, ..., maxk = Inf, oldk = 0)
     return(list(mnewdraw = mnewdraw, positionnew = positionnew, 
         addi = addvar, dropi = dropvar))
 }
-`.rev.jump.int` <-
+.rev.jump.int <-
 function (molddraw = molddraw, K = K, mPlus = mPlus, maxk = Inf, 
     oldk = 0) 
 {
-    rev.idx = floor(.Internal(runif(1, 0, 1)) * 2)
+    rev.idx = floor(runif(1, 0, 1) * 2)
     if ((rev.idx) | oldk == 0) {
         birth.death = .fls.samp.int(molddraw = molddraw, K = K, 
             mPlus = mPlus, maxk, oldk)
@@ -1278,9 +1272,9 @@ function (molddraw = molddraw, K = K, mPlus = mPlus, maxk = Inf,
         var.in = (1:K)[as.logical(molddraw)]
         var.out = (1:K)[!as.logical(molddraw)]
         mnewdraw = (molddraw > mPlus[, var.in[ceiling(length(var.in) * 
-            .Internal(runif(1, 0, 1)))]])
+            runif(1, 0, 1))]])
         mnewdraw = mnewdraw | mPlus[var.out[ceiling(length(var.out) * 
-            .Internal(runif(1, 0, 1)))], ]
+            runif(1, 0, 1))], ]
         positionnew = (1:K)[mnewdraw]
         addvar = (1:K)[molddraw < mnewdraw]
         dropvar = (1:K)[molddraw > mnewdraw]
@@ -1298,7 +1292,7 @@ function (molddraw = molddraw, K = K, mPlus = mPlus, maxk = Inf,
             addi = addvar, dropi = dropvar))
     }
 }
-`.starter` <-
+.starter <-
 function (K, start.value, y, N = N, XtX.big = XtX.big, Xty.big = Xty.big, 
     X = X, fixed.pos = numeric(0)) 
 {
@@ -1367,7 +1361,7 @@ function (K, start.value, y, N = N, XtX.big = XtX.big, Xty.big = Xty.big,
     }
     return(outstart)
 }
-`.top10` <-
+.top10 <-
 function (nmaxregressors = 10, nbmodels = 10, bbeta = FALSE, 
     lengthfixedvec = 0, bbeta2 = FALSE, ..., inivec_lik = numeric(0), 
     inivec_bool = character(0), inivec_count = numeric(0), inivec_vbeta = numeric(0), 
@@ -1555,7 +1549,7 @@ function (nmaxregressors = 10, nbmodels = 10, bbeta = FALSE,
     class(retlist) = "topmod"
     return(retlist)
 }
-`.topmod.as.bbetaT` <-
+.topmod.as.bbetaT <-
 function (tm, gprior.info = NULL, yXdata = NULL, addr2 = FALSE) 
 {
     is.bmao = FALSE

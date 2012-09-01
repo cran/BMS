@@ -1,4 +1,4 @@
-`variable.names.zlm` <-
+variable.names.zlm <-
 function (object, ...) 
 {
     if (!is(object, "zlm")) 

@@ -1,4 +1,4 @@
-`lps.bma` <-
+lps.bma <-
 function (object, realized.y, newdata = NULL) 
 {
     if (!any(class(object) %in% c("pred.density", "bma", "zlm"))) 

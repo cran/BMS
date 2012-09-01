@@ -1,4 +1,4 @@
-`gdensity` <-
+gdensity <-
 function (x, n = 512, plot = TRUE, addons = "zles", addons.lwd = 1.5, 
     ...) 
 {

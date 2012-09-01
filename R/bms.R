@@ -1,4 +1,4 @@
-`bms` <-
+bms <-
 function (X.data, burn = 1000, iter = NA, nmodel = 500, mcmc = "bd", 
     g = "UIP", mprior = "random", mprior.size = NA, user.int = TRUE, 
     start.value = NA, g.stats = TRUE, logfile = FALSE, logstep = 10000, 
@@ -239,8 +239,8 @@ function (X.data, burn = 1000, iter = NA, nmodel = 500, mcmc = "bd",
                 stop(paste("stumbled on rank-deficient model"))
             lprobnew = lprobcalc[["just.loglik"]](ymy = ymy.candi, 
                 k = knew)
-            accept.candi = as.logical(log(.Internal(runif(1, 
-                0, 1))) < lprobnew - lprobold + pmpnew - pmpold)
+            accept.candi = as.logical(log(runif(1, 0, 1)) < lprobnew - 
+                lprobold + pmpnew - pmpold)
         }
         else {
             accept.candi = TRUE

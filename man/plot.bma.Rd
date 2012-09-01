@@ -16,7 +16,7 @@
 \value{
   combines the plotting functions \code{\link{plotModelsize}} and \code{\link{plotConv}}
 }
-\author{ Martin Feldkircher ansd Stefan Zeugner }
+\author{ Martin Feldkircher and Stefan Zeugner }
 \note{ The upper plot shows the prior and posterior distribution of model sizes (\code{\link{plotModelsize}}).\cr
 The lower plot is an indicator of how well the bma object has converged (\code{\link{plotConv}}). }
 \seealso{ \code{\link{plotModelsize}} and \code{\link{plotConv}} 

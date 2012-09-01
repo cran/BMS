@@ -1,4 +1,4 @@
-`density.bma` <-
+density.bma <-
 function (x, reg = NULL, addons = "lemsz", std.coefs = FALSE, 
     n = 300, plot = TRUE, hnbsteps = 30, addons.lwd = 1.5, ...) 
 {
@@ -31,7 +31,7 @@ function (x, reg = NULL, addons = "lemsz", std.coefs = FALSE,
     betas = tm$betas()
     betas2 = tm$betas2()
     if (std.coefs) {
-        sddata = stats::sd(bmao$X.data)
+        sddata = apply(as.matrix(bmao$X.data), 2, stats::sd)
         betas = diag(sddata[-1]) %*% betas/sddata[1]
         betas2 = diag(sddata[-1]^2) %*% betas2/sddata[1]^2
     }
@@ -49,7 +49,7 @@ function (x, reg = NULL, addons = "lemsz", std.coefs = FALSE,
         Ebsd.mcmc = sqrt(bmao$info$b2mo/bmao$info$inccount - 
             Eb1.mcmc^2)
         if (std.coefs) {
-            sddata = stats::sd(bmao$X.data)
+            sddata = apply(as.matrix(bmao$X.data), 2, stats::sd)
             Eb1.mcmc = Eb1.mcmc * sddata[-1]/sddata[1]
             Ebsd.mcmc = Ebsd.mcmc * sddata[-1]/sddata[1]
         }

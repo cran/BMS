@@ -1,4 +1,4 @@
-`image.bma` <-
+image.bma <-
 function (x, yprop2pip = FALSE, order.by.pip = TRUE, do.par = TRUE, 
     do.grid = TRUE, do.axis = TRUE, cex.axis = 1, ...) 
 {
@@ -27,7 +27,7 @@ function (x, yprop2pip = FALSE, order.by.pip = TRUE, do.par = TRUE,
     if (do.par) {
         oldmar = par()$mar
         spaceforyaxis = strwidth(names(pipbounds)[which.max(nchar(names(pipbounds)))], 
-            unit = "inches") * (par("mar")/par("mai"))[[2]]
+            units = "inches") * (par("mar")/par("mai"))[[2]]
         tempmar = oldmar
         tempmar[2] = min(spaceforyaxis + oldmar[2]/2, 0.5 * par("fin")[[1]] * 
             (par("mar")/par("mai"))[[2]])

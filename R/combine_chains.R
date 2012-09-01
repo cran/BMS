@@ -1,4 +1,4 @@
-`combine_chains` <-
+combine_chains <-
 function (...) 
 {
     combine_topmods <- function(topmodobj1, topmodobj2) {

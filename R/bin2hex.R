@@ -1,4 +1,4 @@
-`bin2hex` <-
+bin2hex <-
 function (binvec) 
 {
     if (!is.logical(binvec)) {

@@ -1,4 +1,4 @@
-`model.frame.bma` <-
+model.frame.bma <-
 function (formula, ...) 
 {
     if (!is.bma(formula)) 

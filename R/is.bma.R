@@ -1,4 +1,4 @@
-`is.bma` <-
+is.bma <-
 function (bmao) 
 {
     if (any(is.element(class(bmao), c("bma", "bma.fcast", "bma.sar", 

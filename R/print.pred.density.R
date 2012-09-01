@@ -1,4 +1,4 @@
-`print.pred.density` <-
+print.pred.density <-
 function (x, digits = NULL, ...) 
 {
     outmat = matrix(numeric(0), length(x$fit), 2)

@@ -1,4 +1,4 @@
-`plotComp` <-
+plotComp <-
 function (..., varNr = NULL, comp = "PIP", exact = FALSE, include.legend = TRUE, 
     add.grid = TRUE, do.par = TRUE, cex.xaxis = 0.8) 
 {
@@ -67,7 +67,7 @@ function (..., varNr = NULL, comp = "PIP", exact = FALSE, include.legend = TRUE,
     if (as.logical(do.par)) {
         oldmar = par()$mar
         spaceforxaxis = strwidth(rownames(compMatrix)[which.max(nchar(rownames(compMatrix)))], 
-            unit = "inches", cex = cex.xaxis) * (par("mar")/par("mai"))[[2]]
+            units = "inches", cex = cex.xaxis) * (par("mar")/par("mai"))[[2]]
         tempmar = oldmar
         tempmar[1] = min(max(oldmar[1], spaceforxaxis + oldmar[1]/3), 
             0.5 * par("fin")[[2]] * (par("mar")/par("mai"))[[1]])
@@ -87,7 +87,7 @@ function (..., varNr = NULL, comp = "PIP", exact = FALSE, include.legend = TRUE,
     }
     if (as.logical(add.grid)) 
         grid()
-    axis(1, las = 2, at = 1:nrow(compMatrix), label = rownames(compMatrix), 
+    axis(1, las = 2, at = 1:nrow(compMatrix), labels = rownames(compMatrix), 
         cex.axis = cex.xaxis)
     if (as.logical(do.par)) 
         par(mar = oldmar)

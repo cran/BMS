@@ -1,4 +1,4 @@
-`print.topmod` <-
+print.topmod <-
 function (x, ...) 
 {
     tm = x

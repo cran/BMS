@@ -1,4 +1,4 @@
-`is.topmod` <-
+is.topmod <-
 function (tmo) 
 {
     if (is.element("topmod", class(tmo))) 
