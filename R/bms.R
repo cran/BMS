@@ -142,18 +142,73 @@ function (X.data, burn = 1000, iter = NA, nmodel = 500, mcmc = "bd",
     cumsumweights = iter
     null.lik = lprobcalc$just.loglik(ymy = yty, k = 0)
     if (collect.otherstats) {
-        addup = .addup.mcmc.wotherstats
+        addup <- function() {
+            inccount <<- inccount + molddraw
+            msize <<- msize + kold
+            if (kold != 0) {
+                bm[c(position, K + position, 2 * K + kold, 3 * 
+                  K + position)] = c(b1, b2, 1, b1 > 0)
+                bmo <<- bmo + bm
+            }
+            else {
+                null.count <<- null.count + 1
+            }
+            otherstats <<- lik.list[["otherstats"]]
+            add.otherstats <<- add.otherstats + otherstats
+        }
     }
     else {
-        addup = .addup.mcmc
+        addup <- function() {
+            inccount <<- inccount + molddraw
+            msize <<- msize + kold
+            if (kold != 0) {
+                bm[c(position, K + position, 2 * K + kold, 3 * 
+                  K + position)] = c(b1, b2, 1, b1 > 0)
+                bmo <<- bmo + bm
+            }
+            else {
+                null.count <<- null.count + 1
+            }
+        }
     }
     if (is.enum) {
         cumsumweights = 0
         if (collect.otherstats) {
-            addup = .addup.enum.wotherstats
+            addup <- function() {
+                weight = exp(pmpold + lprobold - null.lik)
+                inccount <<- inccount + weight * molddraw
+                msize <<- msize + weight * kold
+                cumsumweights <<- cumsumweights + weight
+                if (kold != 0) {
+                  bm[c(position, K + position, 2 * K + kold, 
+                    3 * K + position)] = weight * c(b1, b2, 1, 
+                    b1 > 0)
+                  bmo <<- bmo + bm
+                }
+                else {
+                  null.count <<- null.count + weight
+                }
+                otherstats <<- lik.list[["otherstats"]]
+                add.otherstats <<- add.otherstats + weight * 
+                  otherstats
+            }
         }
         else {
-            addup = .addup.enum
+            addup <- function() {
+                weight = exp(pmpold + lprobold - null.lik)
+                inccount <<- inccount + weight * molddraw
+                msize <<- msize + weight * kold
+                cumsumweights <<- cumsumweights + weight
+                if (kold != 0) {
+                  bm[c(position, K + position, 2 * K + kold, 
+                    3 * K + position)] = weight * c(b1, b2, 1, 
+                    b1 > 0)
+                  bmo <<- bmo + bm
+                }
+                else {
+                  null.count <<- null.count + weight
+                }
+            }
         }
     }
     environment(addup) <- environment()

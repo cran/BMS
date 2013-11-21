@@ -4,7 +4,7 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{ Bayesian Linear Model with Zellner's g}
 \description{
-  Used to fit the Bayesian normal-conjugate linear model with Zellner's g prior and mean zero coefficent priors. Provides an object similar to the \code{\link{lm}} class.
+  Used to fit the Bayesian normal-conjugate linear model with Zellner's g prior and mean zero coefficient priors. Provides an object similar to the \code{\link{lm}} class.
 }
 \usage{
 zlm(formula, data = NULL, subset = NULL, g = "UIP")
@@ -25,7 +25,7 @@ zlm(formula, data = NULL, subset = NULL, g = "UIP")
   
 }
 \details{
-  \code{zlm} estimates the coefficents of the following model \eqn{y = \alpha + X \beta + \epsilon} where \eqn{\epsilon} ~ \eqn{N(0,\sigma^2)} and \eqn{X} is the design matrix\cr
+  \code{zlm} estimates the coefficients of the following model \eqn{y = \alpha + X \beta + \epsilon} where \eqn{\epsilon} ~ \eqn{N(0,\sigma^2)} and \eqn{X} is the design matrix\cr
   The priors on the intercept \eqn{\alpha} and the variance \eqn{\sigma} are improper: \eqn{alpha \propto 1}, \eqn{sigma \propto \sigma^{-1}} \cr
   Zellner's g affects the prior on coefficients: \eqn{beta} ~ \eqn{N(0, \sigma^2 g (X'X)^{-1})}. \cr
   Note that the prior mean of coefficients is set to zero by default and cannot be adjusted. Note moreover that \code{zlm} always includes an intercept.

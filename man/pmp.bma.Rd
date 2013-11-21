@@ -36,7 +36,7 @@ pmp.bma(bmao, oldstyle = FALSE)
 \note{
   The second column thus shows the PMPs of the best models relative to all models the call to \code{\link{bms}} has sampled through (therefore typically the second column adds up to less than one).
   The first column relates to the likelihoods of the best models, therefore it would add up to 1. 
-  In order estimate for their marginal likelihoods with respect to the othe rmodels (the ones not retained in the best models), these PMP aadding up to one are multplied with the sum of PMP of the best models accroding to MCMC frequencies. 
+  In order estimate for their marginal likelihoods with respect to the other models (the ones not retained in the best models), these PMP aadding up to one are multiplied with the sum of PMP of the best models accroding to MCMC frequencies. 
   Therefore, the two columns have the same column sum. 
   
   CAUTION: In package versions up to \code{BMS 0.2.5}, the first column was indeed set always equal to one. This behaviour can still be mimicked by setting \code{oldstyle=TRUE}.

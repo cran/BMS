@@ -23,7 +23,7 @@ bms(X.data, burn = 1000, iter = NA, nmodel = 500, mcmc = "bd",
   \item{mcmc}{ a character denoting the model sampler to be used.\cr
               The MC3 sampler \code{mcmc="bd"} corresponds to a birth/death MCMC algogrithm. \code{mcmc="rev.jump"} enacts a reversible jump algorithm adding a "swap" step to the birth / death steps from "bd".\cr
              Alternatively, the entire model space may be fully enumerated by setting \code{mcmc="enumerate"} which will iterate all possible regressor combinations (Note: consider that this means \eqn{2^K} iterations, where K is the number of covariates.)\cr
-             Default is full enumeration (\code{mcmc="enumerate"}) with less then 15 covariates, and the birth-death MC3 sampler (\code{mcmc="bd"}) with 15 covariatess or more. Cf. section 'Details' for more options.
+             Default is full enumeration (\code{mcmc="enumerate"}) with less then 15 covariates, and the birth-death MC3 sampler (\code{mcmc="bd"}) with 15 covariates or more. Cf. section 'Details' for more options.
          }
   \item{g}{ the hyperparameter on Zellner's g-prior for the regression coefficients.\cr
              \code{g="UIP"} corresponds to \eqn{g=N}, the number of observations (default);\cr
@@ -69,7 +69,7 @@ bms(X.data, burn = 1000, iter = NA, nmodel = 500, mcmc = "bd",
   \item{logstep}{ specifies at which number of posterior draws information is written to the log file; default: 10 000 iterations }
   \item{force.full.ols}{ default FALSE. If \code{force.full.ols=TRUE}, the OLS estimation part of the sampling procedure relies on slower matrix inversion, 
              instead of streamlined routines. \code{force.full.ols=TRUE} can slow down sampling but may deal better with highly collinear data}
-  \item{fixed.reg}{ indices or variable names of \code{X.data} that are fixed regressors to be always included in every sampled model. Note: the paramter \code{mprior.size} refers to prior model size including these fixed regressors. }
+  \item{fixed.reg}{ indices or variable names of \code{X.data} that are fixed regressors to be always included in every sampled model. Note: the parameter \code{mprior.size} refers to prior model size including these fixed regressors. }
   %\item{exact}{ deprecated }
   %\item{int}{ deprecated }
   %\item{printRes}{ deprecated }
@@ -84,11 +84,11 @@ bms(X.data, burn = 1000, iter = NA, nmodel = 500, mcmc = "bd",
              Interaction terms will only be sampled along with their component variables: In the colnumn names of X.data, interaction terms need to be 
              denominated by names consisting of the base terms separated by \code{#} (e.g. an interaction term of base variables \code{"A"}, \code{"B"} and \code{"C"} needs column name \code{"A#B#C"}). Then variable \code{"A#B#C"} will only be included in a model if all of the component variables ("A", "B", and "C") are included. 
              
-  The MC3 samplers "\code{bd}", "\code{rev.jump}", "\code{bd.int}" and "\code{rev.jump.int}", iterate away from a starting model by adding, droping or swapping (only in the case of rev.jump) covariates. 
+  The MC3 samplers "\code{bd}", "\code{rev.jump}", "\code{bd.int}" and "\code{rev.jump.int}", iterate away from a starting model by adding, dropping or swapping (only in the case of rev.jump) covariates. 
   
   In an MCMC fashion, they thus randomly draw a candidate model and then move to it in case its marginal likelihood (marg.lik.) is superior to the marg.lik. of the current model. 
   
-  In case the candidate's marg.lik is inferior, it is randomly accepted or rejected according to a probability formed by the ratio of candidate marg.lik over currrent marg.lik.
+  In case the candidate's marg.lik is inferior, it is randomly accepted or rejected according to a probability formed by the ratio of candidate marg.lik over current marg.lik.
   Over time, the sampler should thus converge to a sensible distribution. For aggregate results based on these MC3 frequencies, the first few iterations are typically disregarded (the 'burn-ins'). 
   
   Ad \code{g} and the hyper-g prior: The hyper-g prior introduced by Liang et al. (2008) puts a prior distribution on the shrinkage factor \eqn{g/(1+g)}, namely a Beta distribution \eqn{ Beta(1, 1/2-1)} 
@@ -99,7 +99,7 @@ bms(X.data, burn = 1000, iter = NA, nmodel = 500, mcmc = "bd",
 \value{
   A list of class \code{bma}, that may be displayed using e.g. \code{\link{summary.bma}} or \code{\link{coef.bma}}. The list contains the following elements:
   \item{info}{a list of aggregate statistics: \code{iter} is the number of iterations, \code{burn} the number of burn-ins.\cr
-  The following have to be divided by \code{cumsumweights} to get posterior expected values: \code{inccount} are the posterior inclusion probabilities, \code{b1mo} and \code{b2mo} the first and second moment of coefficients, \code{add.otherstats} other statistics of interest (typically the moments of the shrinkage factor), \code{msize} is the post. expected model size, \code{k.vec} the posterior model size distribution, \code{pos.sign} the unconditional post. probability of positive coefficents, \code{corr.pmp} is the correlation between the best models' MCMC frequencies and their marg. likelihoods.\cr
+  The following have to be divided by \code{cumsumweights} to get posterior expected values: \code{inccount} are the posterior inclusion probabilities, \code{b1mo} and \code{b2mo} the first and second moment of coefficients, \code{add.otherstats} other statistics of interest (typically the moments of the shrinkage factor), \code{msize} is the post. expected model size, \code{k.vec} the posterior model size distribution, \code{pos.sign} the unconditional post. probability of positive coefficients, \code{corr.pmp} is the correlation between the best models' MCMC frequencies and their marg. likelihoods.\cr
   \code{timed} is the time that was needed for MCMC sampling, \code{cons} is the posterior expected value of the constant. \code{K} and \code{N} are the maximum number of covariates and the sample size, respectively.}
   \item{arguments}{a list of the evaluated function arguments provided to \code{bms} (see above)}
   \item{topmod}{a 'topmod' object containing the best drawn models. see \code{\link{topmod}} for more details}
@@ -123,7 +123,7 @@ Sala-i-Martin, X. and G. Doppelhofer and R.I. Miller (2004): Determinants of lon
 }   
 \author{Martin Feldkircher and Stefan Zeugner}
 \note{ There are several ways to speed-up sampling: \code{nmodel=10} saves only the ten best models, at most a marginal improvement. \code{nmodels=0} does not save the best (500) models, however then posterior convergence and likelihood-based inference are not possible.
-     %\code{beta.save=FALSE} saves the best models, but not their coefficents, which renders the use of \code{image.bma} and the paramer \code{exact=TRUE} in functions such as \code{coef.bma} infeasible.
+     %\code{beta.save=FALSE} saves the best models, but not their coefficients, which renders the use of \code{image.bma} and the paramer \code{exact=TRUE} in functions such as \code{coef.bma} infeasible.
      \code{g.stats=FALSE} saves some time by not retaining the shrinkage factors for the MC3 chain (and the best models). \code{force.fullobject=TRUE} in contrast, slows sampling down significantly if \code{mcmc="enumerate"}. 
      }
 \section{Theoretical background}{ 
@@ -140,22 +140,30 @@ Check \url{http://bms.zeugner.eu} for additional help.}
   data(datafls)
   #estimating a standard MC3 chain with 1000 burn-ins and 2000 iterations and uniform model priors
   bma1 = bms(datafls,burn=1000, iter=2000, mprior="uniform")
-  coef(bma1,exact=TRUE, std.coefs=TRUE) #standard coefficients based on exact likelihoods of the 100 best models
+
+  ##standard coefficients based on exact likelihoods of the 100 best models:
+  coef(bma1,exact=TRUE, std.coefs=TRUE) 
   
-  #suppressing user-interactive output, using a customized starting value, and not saving the best models for only 19 observations (but 41 covariates)
-  bma2 = bms(datafls[20:39,],burn=1000, iter=2000, nmodel=0, start.value=c(1,4,7,30),user.int=FALSE,)
+  #suppressing user-interactive output, using a customized starting value, and not saving the best 
+  #  ...models for only 19 observations (but 41 covariates)
+  bma2 = bms(datafls[20:39,],burn=1000, iter=2000, nmodel=0, start.value=c(1,4,7,30),
+     user.int=FALSE)
   coef(bma2)
   
-  #MC3 chain with a hyper-g prior (custom coefficient a=2.1), saving only the 20 best models, and an alternative sampling procedure; putting a log entry to console every 1000th step
-  bma3 = bms(datafls,burn=1000, iter=5000, nmodel=20, g="hyper=2.1", mcmc="rev.jump",logfile="",logstep=1000)
+  #MC3 chain with a hyper-g prior (custom coefficient a=2.1), saving only the 20 best models, 
+  # ...and an alternative sampling procedure; putting a log entry to console every 1000th step
+  bma3 = bms(datafls,burn=1000, iter=5000, nmodel=20, g="hyper=2.1", mcmc="rev.jump",
+      logfile="",logstep=1000)
   image(bma3) #showing the coefficient signs of the 20 best models
   
-  #enumerating with 10 covariates (= 1024 models), keeping the shrinkage factors of the best 200 models
+  #enumerating with 10 covariates (= 1024 models), keeping the shrinkage factors 
+  #  ...of the best 200 models
   bma4 = bms(datafls[,1:11],mcmc="enumerate",nmodel=200,g.stats=TRUE)
 
   #using an interaction sampler for two interaction terms
   dataint=datafls
-  dataint=cbind(datafls,datafls$LifeExp*datafls$Abslat/1000,datafls$Protestants*datafls$Brit-datafls$Muslim)
+  dataint=cbind(datafls,datafls$LifeExp*datafls$Abslat/1000,
+        datafls$Protestants*datafls$Brit-datafls$Muslim)
   names(dataint)[ncol(dataint)-1]="LifeExp#Abslat"
   names(dataint)[ncol(dataint)]="Protestants#Brit#Muslim"
   bma5 = bms(X.data=dataint,burn=1000,iter=9000,start.value=0,mcmc="bd.int") 

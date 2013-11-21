@@ -11,7 +11,7 @@ There are currently five model prior structures built into the BMS package, gene
 \code{mprior.fixedt.init}: creates the popular binomial model prior object with common inclusion probabilities.\cr
 \code{mprior.randomt.init}: creates a beta-binomial model prior object.\cr
 \code{mprior.pip.init}: creates a binomial model prior object that allows for defining individual prior inclusion probabilities.\cr
-\code{mprior.customk.init}: creates a model prior object that allows for defining a custom prior for each model paramter size.\cr
+\code{mprior.customk.init}: creates a model prior object that allows for defining a custom prior for each model parameter size.\cr
 The following describes the necessary slots:
 }
 \section{Slots}{

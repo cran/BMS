@@ -24,7 +24,7 @@
   \item{fit}{a vector with the expected values of the predictions (the 'point forecasts')}
   \item{std.err}{a vector with the standard deviations  of the predictions (the 'standard errors')}
   \item{dyf(realized.y, predict_index=NULL)}{Returns the densities of realized response variables provided in \code{realized.y}. \cr
-  If \code{realized.y} is a matrix, then each row corresponds to a forecast obeservation in \code{newdata}\cr
+  If \code{realized.y} is a matrix, then each row corresponds to a forecast observation in \code{newdata}\cr
   if not left empty, \code{predict.index} specifies to which observations in newdata the realized.y should apply}
   \item{lps(realized.y, predict_index=NULL)}{Computes the log predictive score for the response varaible provided in \code{realized.y} (cf. \code{\link{lps.bma}}) -\cr
   Note that the LPS equals minus the mean of the logarithmized results from \code{dyf})  }

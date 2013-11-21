@@ -4,7 +4,7 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{ Posterior Inclusion Probabilities and Coefficients from a 'bma' Object}
 \description{
-  Returns a matrix with aggregate covariate-specific Bayesian model Averaging: posterior inclusion probabilites (PIP), post. exepected values and standard deviations of coefficents, as well as sign probabilites
+  Returns a matrix with aggregate covariate-specific Bayesian model Averaging: posterior inclusion probabilites (PIP), post. expected values and standard deviations of coefficients, as well as sign probabilites
 }
 \usage{
  \method{coef}{bma}(object, exact = FALSE, order.by.pip = TRUE, include.constant = FALSE, 
@@ -17,10 +17,10 @@
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{object, bmao}{ a 'bma' object (cf. \code{\link{bms}}) }
-  \item{exact}{ if \code{exact=FALSE}, then PIPs, coefficents, etc. will be based on aggregate information from the sampling chain with posterior model distributions based on MCMC frequencies (except in case of enumeration - cf. 'Details');\cr
+  \item{exact}{ if \code{exact=FALSE}, then PIPs, coefficients, etc. will be based on aggregate information from the sampling chain with posterior model distributions based on MCMC frequencies (except in case of enumeration - cf. 'Details');\cr
   if \code{exact=TRUE}, estimates will be based on the \code{\link[=bms]{nmodel}} best models encountered by the sampling chain, with the posterior model distribution based on their \emph{exact} marginal likelihoods - cf. 'Details' below.
   }
-  \item{order.by.pip}{ \code{order.by.pip=TRUE} orders the resulting matrix according to posteriorr inclusion probabilites, \code{order.by.pip=FALSE} ranks them according to the original data (order of the covariates as in provided in \code{X.data} to \code{\link{bms}}), default \code{TRUE}}
+  \item{order.by.pip}{ \code{order.by.pip=TRUE} orders the resulting matrix according to posterior inclusion probabilites, \code{order.by.pip=FALSE} ranks them according to the original data (order of the covariates as in provided in \code{X.data} to \code{\link{bms}}), default \code{TRUE}}
   \item{include.constant}{ If \code{include.constant=TRUE} then the resulting matrix includes the expected value of the constant in its last row. Default \code{FALSE}  }
   \item{incl.possign}{ If \code{incl.possign=FALSE}, then the sign probabilites column (cf. 'Values' below) is omitted from the result. Default \code{TRUE} }
   \item{std.coefs}{ If \code{std.coefs=TRUE} then the expected values and standard deviations are returned in standardized form, i.e. as if the original data all had mean zero and variance 1. If \code{std.coefs=FALSE} (default) then both expected values and standard deviations are returned 'as is'. }
@@ -29,7 +29,7 @@
 }
 \details{
   More on the argument \code{exact}: \cr
-  In case the argument \code{exact=TRUE}, the PIPs, coefficent statistics and conditional sign probabilities are computed on the basis of the (500) best models the sampling chain encoutered (cf. argument \code{nmodel} in \code{\link{bms}}). Here, the weights for Bayesian model averaging (BMA) are the posterior marginal likelihoods of these best models. \cr
+  In case the argument \code{exact=TRUE}, the PIPs, coefficient statistics and conditional sign probabilities are computed on the basis of the (500) best models the sampling chain encountered (cf. argument \code{nmodel} in \code{\link{bms}}). Here, the weights for Bayesian model averaging (BMA) are the posterior marginal likelihoods of these best models. \cr
   In case \code{exact=FALSE}, then these statistics are based on all accepted models (except burn-ins): If \code{mcmc="enumerate"} then this are simply all models of the traversed model space, with their marginal likelihoods providing the weights for BMA.\cr
   If, however, the bma object \code{bmao} was based on an MCMC sampler (e.g. when \code{\link{bms}} argument \code{mcmc="bd"}), then BMA statistics are computed differently: In contrast to above, the weights for BMA are MCMC frequencies, i.e. how often the respective models were encountered by the MCMC sampler. (cf. a comparison of MCMC frequencies and marginal likelihoods for the best models via the function \code{\link{pmp.bma}}).
 }
@@ -52,13 +52,14 @@ Check \url{http://bms.zeugner.eu} for additional help.}
 data(datafls)
 mm=bms(datafls,burn=1000,iter=5000,nmodel=200)
 
-#standard BMA PIPs and coefficients from the MCMC sampling chain, based on how frequently th emodels were drawn
+#standard BMA PIPs and coefficients from the MCMC sampling chain, based on 
+#  ...how frequently the models were drawn
 coef(mm)
 
-#standardized coefficents, ordered by index
+#standardized coefficients, ordered by index
 coef(mm,std.coefs=TRUE,order.by.pip=FALSE)
 
-#coefficents conditional on inclusion:
+#coefficients conditional on inclusion:
 coef(mm,condi.coef=TRUE)
 
 #same as

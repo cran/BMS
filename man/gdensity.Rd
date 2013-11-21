@@ -65,7 +65,8 @@ Check \url{http://bms.zeugner.eu} for additional help.}
  # the grey bars represent expected shrinkage factors of the individual models
  gdensity(mm,addons="lzfes") 
  
- gdensity(mm,addons="zSEm",addons.lwd=2) #plotting the median 'm' and the posterior mean and bounds based on MCMC results
+ # #plotting the median 'm' and the posterior mean and bounds based on MCMC results:
+ gdensity(mm,addons="zSEm",addons.lwd=2)
 
 # plot the posterior shrinkage density only for the very best model
  gdensity(mm[1],addons="esz")

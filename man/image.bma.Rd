@@ -3,7 +3,7 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{ Plot Signs of Best Models }
 \description{
-  Plots a grid with signs and inclusion of coefficents vs. posterior model probabilites for the best models in a 'bma' object: 
+  Plots a grid with signs and inclusion of coefficients vs. posterior model probabilities for the best models in a 'bma' object: 
 }
 \usage{
  \method{image}{bma}(x, yprop2pip = FALSE, order.by.pip = TRUE, 
@@ -13,11 +13,11 @@
 \arguments{
   \item{x}{a list of class bma (cf. \code{\link{bms}} for further details) }
   \item{yprop2pip}{ if \code{yprop2pip=TRUE} then the grid lines on the vertical axis are scaled according to the coefficients' inclusion probabilites.\cr
-      If \code{yprop2pip=FALSE} (default) then the gridlines on the vertical axis are equidistant. 
+      If \code{yprop2pip=FALSE} (default) then the grid lines on the vertical axis are equidistant. 
       }
-  \item{order.by.pip}{ with \code{order.by.pip=TRUE} (default), coefficents are sorted according to their posterior inclusion probabilites along the vertical axis. If \code{order.by.pip=FALSE} they are ordered as they were provided to \code{\link{bms}}.}
+  \item{order.by.pip}{ with \code{order.by.pip=TRUE} (default), coefficients are sorted according to their posterior inclusion probabilites along the vertical axis. If \code{order.by.pip=FALSE} they are ordered as they were provided to \code{\link{bms}}.}
   \item{do.par}{ Defaults to \code{do.par=TRUE}, which adjusts \code{\link{par}()$mar} for optimal positioning. Set \code{do.par=FALSE} for customizing \code{par} yourself.}
-  \item{do.grid}{ \code{do.grid=TRUE} (default) plots grid lines among the chart's boxes, akin to the low level command \code{\link{grid}}. \code{do.grid=FALSE} omits the gridlines.}
+  \item{do.grid}{ \code{do.grid=TRUE} (default) plots grid lines among the chart's boxes, akin to the low level command \code{\link{grid}}. \code{do.grid=FALSE} omits the grid lines.}
   \item{do.axis}{ \code{do.axis=TRUE} (default) plots axis tick marks and labels (cf. \code{\link{axis}}). \code{do.axis=FALSE} omits them. }
   \item{cex.axis}{ font size for the axes (cf. \code{\link{axis}}), defaults to 1  }
   \item{\dots}{ Parameters to be passed on to \code{\link{image.default}}.}
@@ -33,7 +33,7 @@
 %\note{ ~~further notes~~ 
  %~Make other sections like Warning with \section{Warning }{....} ~
 %}
-\seealso{ \link{coef.bma} for the coefficents in matrix form, \link{bms} for creating 'bma' objects. 
+\seealso{ \link{coef.bma} for the coefficients in matrix form, \link{bms} for creating 'bma' objects. 
 
 Check \url{http://bms.zeugner.eu} for additional help.}
 \examples{

@@ -19,7 +19,7 @@
 }
 \details{
 The log predictive score is an indicator for the likelihood of several forecasts.\cr
-It is definied as minus the arithmethic mean of the logarithms of the point densities for \code{realized.y} given \code{newdata}.\cr
+It is defined as minus the arithmethic mean of the logarithms of the point densities for \code{realized.y} given \code{newdata}.\cr
 Note that in most cases is more efficient to first compute the predictive density object via a call to \code{\link{pred.density}} and only then pass the result on to \code{lps.bma}.
 }
 %\references{ ~put references to the literature/web site here ~ }

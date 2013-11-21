@@ -6,7 +6,8 @@
   Plots posterior and prior model size distribution
 }
 \usage{
-plotModelsize(bmao, exact = FALSE, ksubset = NULL, include.legend = TRUE, do.grid = TRUE, ...)
+plotModelsize(bmao, exact = FALSE, ksubset = NULL, include.legend = TRUE, 
+   do.grid = TRUE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

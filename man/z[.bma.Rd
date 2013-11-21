@@ -20,7 +20,7 @@
   \item{tm}{ an object of class \code{\link{topmod}}' }
 }
 \details{
-  Both funtions are equivalent: they serve to select a subset of the best models in a bma object.
+  Both functions are equivalent: they serve to select a subset of the best models in a bma object.
 }
 \value{
   If \code{tm} is a topmod object (see \code{\link{topmod}}), then \code{tm[i]} returns a topmod object that only retains the models specified by \code{i}

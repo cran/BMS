@@ -23,7 +23,7 @@
   \item{\dots}{further arguments passed to or from other methods.}
 }
 \details{
-  The mehtods \code{quantile.coef.density} and \code{quantile.pred.density} both apply \code{quantile.density} to densities nested with object of class \code{coef.density} or \code{pred.density}.\cr
+  The methods \code{quantile.coef.density} and \code{quantile.pred.density} both apply \code{quantile.density} to densities nested with object of class \code{coef.density} or \code{pred.density}.\cr
   The function \code{quantile.density} applies generically to the built-in class \code{\link{density}} (as least for versions where there is no such method in the pre-configured packages).\cr
   Note that \code{quantile.density} relies on trapezoidal integration in order to compute the cumulative densities necessary for the calculation of quantiles. 
 }

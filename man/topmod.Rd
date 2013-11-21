@@ -51,7 +51,7 @@ is.topmod(tmo)
   \item{nbmodels}{Returns the argument \code{nbmodel}}
   \item{nregs}{Returns the argument \code{nmaxregressors}}
   \item{bool_binary()}{Returns a matrix whose columns present the models conforming to \code{lik()} in binary form}  
-  \item{betas()}{a matrix whose columns are the cofficents conforming to \code{bool_binary()} (Note that these include zero coefficents due to non-inclusion of covariates); Note: if \code{bbeta=FALSE} this returns an empty matrix}
+  \item{betas()}{a matrix whose columns are the coefficients conforming to \code{bool_binary()} (Note that these include zero coefficients due to non-inclusion of covariates); Note: if \code{bbeta=FALSE} this returns an empty matrix}
   \item{betas2()}{similar to \code{betas} , for the second moments of coefficients Note: if \code{bbeta<=0}, this returns an empty matrix}
   \item{fixed_vector()}{The columns of this matrix return the \code{fixed_vector} statistics conforming to \code{lik()} (see Details); Note: if \code{lengthfixedvec=0} this returns an empty matrix}  
 }
@@ -84,7 +84,9 @@ Check \url{http://bms.zeugner.eu} for additional help.}
   
   #advanced: should return the same result as
   #initialize
-  tm2= topmod(2,4,TRUE,0, liks = c(-2.2,-2.3), ncounts = c(2,1), modelbinaries = cbind(c(0,1,1,1),c(1,1,1,1)), betas = cbind(0:3,1:4), betas2 = cbind(c(0,5:7),5:8)) 
+  tm2= topmod(2,4,TRUE,0, liks = c(-2.2,-2.3), ncounts = c(2,1), 
+          modelbinaries = cbind(c(0,1,1,1),c(1,1,1,1)), betas = cbind(0:3,1:4), 
+          betas2 = cbind(c(0,5:7),5:8)) 
 
   #update 
   tm$addmodel(-2.5,c(1,0,0,1),1:2,5:6) #add another model

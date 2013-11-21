@@ -4,7 +4,7 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{ Concatenate bma objects }
 \description{
-  Combines bma objects (resulting from \code{\link{bms}}). Can be used to split estimation over several machines, or combine the MCMC resultls obtained from different starting points.
+  Combines bma objects (resulting from \code{\link{bms}}). Can be used to split estimation over several machines, or combine the MCMC results obtained from different starting points.
 }
 \usage{
 combine_chains(...)

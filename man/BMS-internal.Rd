@@ -47,7 +47,7 @@
 \details{These are not to be called by the user, but may come handy for programming tasks. 
 The \code{BMS.RData} corresponding to the package (available at \url{http://bms.zeugner.eu} contains some comments inside the functions to show how they work
 
-The functions \code{.mprior.fixedt.init} and \code{.gprior.constantg.init} are templates of funtions to create objects of class \code{\link{mprior-class}} and \code{\link{gprior-class}}, which may be used to customize \code{\link{bms}} and \code{\link{zlm}}.
+The functions \code{.mprior.fixedt.init} and \code{.gprior.constantg.init} are templates of functions to create objects of class \code{\link{mprior-class}} and \code{\link{gprior-class}}, which may be used to customize \code{\link{bms}} and \code{\link{zlm}}.
 
 \code{.topmod.as.bbetaT} could be of use to a programmer interested in the \code{\link{topmod}} object.
 

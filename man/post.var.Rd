@@ -7,7 +7,7 @@
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{ Posterior Variance and Deviance }
 \description{
-  Returns posterior residual variance, deviance, or pseudo R-squared, according to the cosen prior structure
+  Returns posterior residual variance, deviance, or pseudo R-squared, according to the chosen prior structure
 }
 \usage{
  post.var(object, exact = FALSE)

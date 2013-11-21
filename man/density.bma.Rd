@@ -43,7 +43,7 @@
 }
 \value{
   The function returns a list containing objects of the class \code{\link{density}} detailing the marginal posterior densities for each coefficient provided in \code{reg}.\cr
-  In case of \code{density.zlm}, simple marginal posterior coefficent densities are computed, while \code{density.bma} calculates there mixtures over models according to posterior model probabilities.\cr
+  In case of \code{density.zlm}, simple marginal posterior coefficient densities are computed, while \code{density.bma} calculates there mixtures over models according to posterior model probabilities.\cr
   These densities contain only the density points apart from the origin. (see 'Note' below)
   
   As long as \code{plot=TRUE}, the densities are plotted too.

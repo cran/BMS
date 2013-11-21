@@ -205,14 +205,13 @@ function (object, newdata = NULL, n = 300, hnbsteps = 30, ...)
             return(NULL)
         for (xf.index in 1:rnew) {
             if (!any(is.na(newX[xf.index, ]))) {
-                xf_index <<- xf.index
                 lbound = Eyf[[xf.index]] - sqrt(Varyf[[xf.index]]) * 
                   4
                 ubound = Eyf[[xf.index]] + sqrt(Varyf[[xf.index]]) * 
                   4
                 seqs = seq(lbound, ubound, (ubound - lbound)/(n - 
                   1))
-                allm_dens = sapply(seq_len(nmodel), function(x) calcdensvec(xf_index, 
+                allm_dens = sapply(seq_len(nmodel), function(x) calcdensvec(xf.index, 
                   seqs, x))
                 myy = as.vector(tcrossprod(t(as.matrix(pmps)), 
                   allm_dens))
@@ -276,7 +275,7 @@ function (object, newdata = NULL, n = 300, hnbsteps = 30, ...)
         dotargs = .adjustdots(dotargs, xlab = "Response variable", 
             main = main_default, col = 4, zero.line = FALSE)
         thingy = dlist[[xf.index]]
-        eval(as.call(c(list(as.name("plot.density"), as.name("thingy")), 
+        eval(as.call(c(list(as.name("plot"), as.name("thingy")), 
             as.list(dotargs))))
         leg.col = numeric(0)
         leg.lty = numeric(0)

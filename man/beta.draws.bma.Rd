@@ -14,7 +14,7 @@ beta.draws.bma(bmao,stdev=FALSE)
   \item{stdev}{if \code{stdev=FALSE} then \code{beta.draws.bma} returns the (conditional) posterior expected values of the coefficients (i.e. 'Bayesian coefficients'). If \code{stdev=TRUE} it returns their posterior standard deviations. }
 }
 \value{
-  Each column presents the coefficents for the model indicated by its column name. The zero coefficients are the excluded covariates per model.
+  Each column presents the coefficients for the model indicated by its column name. The zero coefficients are the excluded covariates per model.
   Note that the coefficients returned are only those of the best (100) models encountered by the \code{bma} object (cf. argument \code{nmodels} of \code{\link{bms}}).
   
   For aggregate coefficients please refer to \code{\link{coef.bma}}.

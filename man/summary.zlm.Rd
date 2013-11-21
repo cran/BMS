@@ -14,12 +14,12 @@
 \item{\dots}{	further arguments passed to or from other methods}
 }
 \details{
-\code{summary.zlm} prints out coefficients expected values and their standard deviations, as well as information on the gprior and the log marginal likelihood. However, it invisbly returns a list with elements as described below:
+\code{summary.zlm} prints out coefficients expected values and their standard deviations, as well as information on the gprior and the log marginal likelihood. However, it invisibly returns a list with elements as described below:
 }
 \value{
 A \code{\link{list}} with the following elements
   \item{residuals}{ The expected value of residuals from the model}
-  \item{coefficients}{The posterior expected values of coefficents (including the intercept) }
+  \item{coefficients}{The posterior expected values of coefficients (including the intercept) }
   \item{coef.sd}{Posterior standard deviations of the coefficients (the intercept SD is \code{NA}, since an improper prior was used)}
   \item{gprior}{The g prior as it has been submitted to \code{object}}
   \item{E.shrinkage}{the shrinkage factor \eqn{g/(1+g)}, respectively its posterior expected value in case of a hyper-g prior}
