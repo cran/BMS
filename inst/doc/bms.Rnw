@@ -1,6 +1,6 @@
 \documentclass[a4paper]{article}
 \title{Bayesian Model Averaging with BMS\\ 
-\normalsize{for BMS Version 0.3.3}}
+\normalsize{for BMS Version 0.3.4}}
 \author{Stefan Zeugner}
 \usepackage{natbib}
 \usepackage{vmargin}

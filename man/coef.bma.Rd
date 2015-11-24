@@ -1,6 +1,7 @@
 \name{coef.bma}
 \alias{estimates.bma}
 \alias{coef.bma}
+
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{ Posterior Inclusion Probabilities and Coefficients from a 'bma' Object}
 \description{
@@ -11,12 +12,12 @@
     incl.possign = TRUE, std.coefs = FALSE, condi.coef = FALSE, ...) 
 
 #equivalent: 
- estimates.bma(bmao, exact = FALSE, order.by.pip = TRUE, include.constant = FALSE, 
+ estimates.bma(object, exact = FALSE, order.by.pip = TRUE, include.constant = FALSE, 
     incl.possign = TRUE, std.coefs = FALSE, condi.coef = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{object, bmao}{ a 'bma' object (cf. \code{\link{bms}}) }
+  \item{object}{ a 'bma' object (cf. \code{\link{bms}}) }
   \item{exact}{ if \code{exact=FALSE}, then PIPs, coefficients, etc. will be based on aggregate information from the sampling chain with posterior model distributions based on MCMC frequencies (except in case of enumeration - cf. 'Details');\cr
   if \code{exact=TRUE}, estimates will be based on the \code{\link[=bms]{nmodel}} best models encountered by the sampling chain, with the posterior model distribution based on their \emph{exact} marginal likelihoods - cf. 'Details' below.
   }

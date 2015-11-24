@@ -1,7 +1,9 @@
 estimates.bma <-
-function (bmao, exact = FALSE, order.by.pip = TRUE, include.constant = FALSE, 
+function (object, exact = FALSE, order.by.pip = TRUE, include.constant = FALSE, 
     incl.possign = TRUE, std.coefs = FALSE, condi.coef = FALSE) 
 {
+    bmao = object
+    rm(object)
     if (!is.bma(bmao)) {
         stop("you need to provide a BMA object")
         return()

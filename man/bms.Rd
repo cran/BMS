@@ -9,11 +9,13 @@
 bms(X.data, burn = 1000, iter = NA, nmodel = 500, mcmc = "bd",
   g = "UIP", mprior = "random", mprior.size = NA, user.int = TRUE, 
     start.value = NA, g.stats = TRUE, 
-    logfile = FALSE, logstep = 10000, force.full.ols = FALSE, fixed.reg=numeric(0))
+    logfile = FALSE, logstep = 10000, force.full.ols = FALSE, 
+    fixed.reg = numeric(0), data = NULL, randomizeTimer = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{X.data}{ a data frame or a matrix, with the dependent variable in the first column, followed by the covariates (alternatively, \code{X.data} can also be provided as a \code{\link{formula}}).
+  \item{X.data}{ a data frame or a matrix, with the dependent variable in the first column, followed by the covariates.\cr
+ Alternatively, \code{X.data} can also be provided as a \code{\link{formula}}. In that case, it may advisable to provide the data in argument \code{data}.).
    Note that \code{bms} automatically estimates a constant, therefore including constant terms is not necessary. }
   \item{burn}{ The (positive integer) number of burn-in draws for the MC3 sampler, defaults to 1000. (Not taken into account if mcmc="enumerate")}
   \item{iter}{ If mcmc is set to an MC3 sampler, then this is the number of iteration draws to be sampled (ex burn-ins), default 3000 draws. \cr 
@@ -67,9 +69,12 @@ bms(X.data, burn = 1000, iter = NA, nmodel = 500, mcmc = "bd",
              into that specified position. (default: \code{logfile=FALSE}). Note that \code{logfile=""} implies log printouts on the console.
              }
   \item{logstep}{ specifies at which number of posterior draws information is written to the log file; default: 10 000 iterations }
-  \item{force.full.ols}{ default FALSE. If \code{force.full.ols=TRUE}, the OLS estimation part of the sampling procedure relies on slower matrix inversion, 
+  \item{force.full.ols}{ default \code{FALSE}. If \code{force.full.ols=TRUE}, the OLS estimation part of the sampling procedure relies on slower matrix inversion, 
              instead of streamlined routines. \code{force.full.ols=TRUE} can slow down sampling but may deal better with highly collinear data}
   \item{fixed.reg}{ indices or variable names of \code{X.data} that are fixed regressors to be always included in every sampled model. Note: the parameter \code{mprior.size} refers to prior model size including these fixed regressors. }
+  \item{data}{ an optional \code{\link{data.frame}}  (or one that can be coerced to that class such as a \code{\link{matrix}}: cf. \code{\link{lm}}) containing the
+          variables in the model.  If not found in \code{data}, the variables are taken from \code{environment(formula)}, typically the environment from which \code{bms} is called.}
+  \item{randomizeTimer}{ default \code{TRUE} makes a call to \code{\link{set.seed}} in order to generate random numbers for the MCMC sampler. In laymen's terms: If set to default \code{FALSE}, then there the sampler will always parse to exactly the same random numbers.  }
   %\item{exact}{ deprecated }
   %\item{int}{ deprecated }
   %\item{printRes}{ deprecated }
@@ -106,7 +111,7 @@ bms(X.data, burn = 1000, iter = NA, nmodel = 500, mcmc = "bd",
   \item{start.pos}{the positions of the starting model. If bmao is a'bma' object this corresponds to covariates bmao$reg.names[bmao$start.pos]. If bmao is a chain that resulted from several starting models (cf. \code{\link{c.bma}}, then \code{start.pos} is a list detailing all of them.} 
   \item{gprior.info}{a list of class \code{\link{gprior-class}}, detailing information on the g-prior: \code{gtype} corresponds to argument \code{g} above, \code{is.constant} is FALSE if \code{gtype} is either "hyper" or "EBL", \code{return.g.stats} corresponds to argument \code{g.stats} above, \code{shrinkage.moments} contains the first and second moments of the shrinkage factor (only if \code{return.g.stats==TRUE}), \code{g} details the fixed g (if \code{is.constant==TRUE}), \code{hyper.parameter} corresponds to the hyper-g parameter \eqn{a} as in Liang et al. (2008) }
   \item{mprior.info}{a list of class \code{\link{mprior-class}}, detailing information on the model prior: \code{origargs} lists the original arguments to \code{mprior} and \code{mprior.size} above; \code{mp.msize} denotes the prior mode size; \code{mp.Kdist} is a (K+1) vector with the prior model size distribution from 0 to K}
-  \item{X.data}{data.frame or matrix: corresponds to argument \code{X.data} above, possibly cleaned for NAs}
+  \item{X.data}{data.frame or matrix similar to \code{\link{model.frame}}: corresponds to argument \code{X.data} above, possibly cleaned for NAs}
   \item{reg.names}{character vector: the covariate names to be used for X.data (corresponds to \code{\link{variable.names.bma}} }
   \item{bms.call}{the original call to the \code{bms} function}
 }
@@ -159,6 +164,13 @@ Check \url{http://bms.zeugner.eu} for additional help.}
   #enumerating with 10 covariates (= 1024 models), keeping the shrinkage factors 
   #  ...of the best 200 models
   bma4 = bms(datafls[,1:11],mcmc="enumerate",nmodel=200,g.stats=TRUE)
+
+  #another enumeration example: with less than 15 covariates, enumeration is the default
+  #  ...of the best 200 models
+  data(attitude)
+  bma4b = bms(attitude)
+  bma4c = bms(rating ~complaints + privileges + raises, data = attitude)
+
 
   #using an interaction sampler for two interaction terms
   dataint=datafls

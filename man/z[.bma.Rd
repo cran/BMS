@@ -7,25 +7,24 @@
   returns a bma (or topmod) object whose 
 }
 \usage{
-\method{[}{bma}(bmao, idx)
+\method{[}{bma}(x, i, ...)
 
-\method{[}{topmod}(tm, idx)
+\method{[}{topmod}(x, i, ...)
 
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{bmao}{ an object of class 'bma' }
-  \item{idx}{ index of the best models to be retained }
-  
-  \item{tm}{ an object of class \code{\link{topmod}}' }
+  \item{x}{ an object of class 'bma' or of class \code{\link{topmod}} }
+  \item{i}{ index of the best models to be retained }
+  \item{\ldots}{ arguments such as 'drop' will not have an effect }
 }
 \details{
   Both functions are equivalent: they serve to select a subset of the best models in a bma object.
 }
 \value{
-  If \code{tm} is a topmod object (see \code{\link{topmod}}), then \code{tm[i]} returns a topmod object that only retains the models specified by \code{i}
+  If \code{x} is a topmod object (see \code{\link{topmod}}), then \code{x[i]} returns a topmod object that only retains the models specified by \code{i}
   
-  if \code{bmao} is an object of class bma (see \code{\link{bms}}), \code{bmao[i]} returns a bma object whose topmod object (i.e. \code{bmao$topmod} has beeen adjusted accordingly)
+  if \code{x} is an object of class bma (see \code{\link{bms}}), \code{x[i]} returns a bma object whose topmod object (i.e. \code{x$topmod} has been adjusted accordingly)
 }
 \author{ Martin Feldkircher and Stefan Zeugner }
 \note{ Note that the method parameter \code{drop} is of no importance here. Moreover the corresponding assignment operator \code{\link{[<-}} is of no use.}

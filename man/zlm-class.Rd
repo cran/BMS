@@ -2,7 +2,7 @@
 \docType{class}
 \alias{zlm-class}
 
-\title{Class "zlm"}
+\title{Class \code{"zlm"}}
 \description{	A list holding output from the Bayesian Linar Model under Zellner's g prior akin to class 'lm' }
 \section{Objects from the Class}{
 Objects can be created via calls to \code{\link{zlm}}, but indirectly also via \code{\link{as.zlm}}.\cr
@@ -10,6 +10,8 @@ Objects can be created via calls to \code{\link{zlm}}, but indirectly also via \
 }
 \section{Slots}{
   \describe{
+    \item{\code{.S3Class}:}{Object of class \code{"list"}, elements are: 
+     \describe{
     \item{\code{coefficients}:}{A named vector of class \code{"numeric"}: holds the posterior expected values of 'regression' coefficients. The first element always holds the intercept}
     \item{\code{residuals}:}{Vector of class \code{"numeric"}: the residuals, that is the response variable minus fitted values }
     \item{\code{rank}:}{Scalar integer class \code{"numeric"}: the number of estimated parameters}
@@ -21,7 +23,11 @@ Objects can be created via calls to \code{\link{zlm}}, but indirectly also via \
     \item{\code{coef2moments}:}{Named vector of class \code{"numeric"}: coefficient posterior second moments }
     \item{\code{marg.lik}:}{Scalar integer of class \code{"numeric"}: the log marginal likelihood of the model }
     \item{\code{gprior.info}:}{An object of class \code{"list"} detailing information on the g-prior, cf. output value \code{gprior.info} in \code{\link{bms}} }
+      }}
   }
+}
+\section{Extends}{
+Class \code{"\linkS4class{oldClass}"}, directly.
 }
 \section{Methods}{
 No methods defined with class "zlm" in the signature.

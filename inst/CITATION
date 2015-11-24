@@ -1,13 +1,23 @@
-citHeader("To cite package BMS in scientific work use:")
+bibentry(bibtype = "Article",
+  title        = "Bayesian Model Averaging Employing Fixed and Flexible Priors: The {BMS} Package for {R}",
+  author       = c(person(given = "Stefan",
+                          family = "Zeugner",
+                          email = "stefan.zeugner@gmail.com"),
+                   person(given = "Martin",
+                          family = "Feldkircher",
+                          email = "martin.feldkircher@oenb.at")),
+  journal      = "Journal of Statistical Software",
+  year         = "2015",
+  volume       = "68",
+  number       = "4",
+  pages        = "1--37",
+  doi          = "10.18637/jss.v068.i04",
 
-citEntry(entry="Article",
-  title="Benchmark Priors Revisited: On Adaptive Shrinkage and the Supermodel Effect in Bayesian Model Averaging",
-  author=personList(as.person("Martin Feldkircher"),
-                    as.person("Stefan Zeugner")),
-  journal="IMF Working Papers",
-  year="2009",
-  textVersion="Feldkircher, M. and S. Zeugner (2009): Benchmark Priors Revisited: On Adaptive Shrinkage and the Supermodel Effect in Bayesian Model Averaging; IMF Working Paper 09-202"
-  )
+  header       = "To cite BMS in publications use:",
+  textVersion  =
+  paste("Stefan Zeugner, Martin Feldkircher (2015).",
+        "Bayesian Model Averaging Employing Fixed and Flexible Priors: The BMS Package for R.",
+        "Journal of Statistical Software, 68(4), 1-37.",
+        "doi:10.18637/jss.v068.i04")
+)
 
-
-citFooter("In case of coding etc. please incorporate a reference to the website <http://bms.zeugner.eu> in a visible manner (e.g. the source code)")

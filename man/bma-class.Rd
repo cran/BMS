@@ -10,7 +10,9 @@ A \code{bma} object is a list whose elements hold information on input and outpu
 }
 \section{Slots}{
   \describe{
-    \item{\code{info}:}{An object of class \code{"list"} holding aggregate statistics: \code{iter} is the number of iterations, \code{burn} the number of burn-ins. \cr
+    \item{\code{.S3Class}:}{Object of class \code{"list"}, elements are:
+     \describe{
+   \item{\code{info}:}{An object of class \code{"list"} holding aggregate statistics: \code{iter} is the number of iterations, \code{burn} the number of burn-ins. \cr
   The following have to be divided by \code{cumsumweights} to get posterior expected values: \code{inccount} are the posterior inclusion probabilities, \code{b1mo} and \code{b2mo} the first and second moment of coefficients, \code{add.otherstats} other statistics of interest (typically the moments of the shrinkage factor), \code{msize} is the post. expected model size, \code{k.vec} the posterior model size distribution, \code{pos.sign} the unconditional post. probability of positive coefficients, \code{corr.pmp} is the correlation between the best models' MCMC frequencies and their marg. likelihoods. \cr 
   \code{timed} is the time that was needed for MCMC sampling, \code{cons} is the posterior expected value of the constant. \code{K} and \code{N} are the maximum number of covariates and the sample size, respectively. }
     \item{\code{arguments}:}{An object of class \code{"list"} holding the evaluated function arguments provided to \code{\link{bms}}  }
@@ -21,6 +23,7 @@ A \code{bma} object is a list whose elements hold information on input and outpu
     \item{\code{X.data}:}{Object of class \code{"data.frame"} or class \code{"matrix"}, matrix: corresponds to argument \code{X.data} in \code{\link{bms}}, possibly cleaned for NAs }
     \item{\code{reg.names}:}{Vector of class \code{"character"}: the covariate names to be used for \code{X.data} in \code{\link{bms}} }
     \item{\code{bms.call}:}{Object of class \code{"call"}: the original call to the \code{\link{bms}} function }
+    }}
   }
 }
 \section{Methods}{

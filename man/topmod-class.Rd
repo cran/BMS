@@ -17,6 +17,8 @@ In addition, there is the possibility to save (the first moments of) coefficient
 }
 \section{Slots}{
   \describe{
+    \item{\code{.S3Class}:}{Object of class \code{"list"}, elements are: 
+     \describe{
     \item{\code{addmodel}:}{function that adjusts the list of models in the 'topmod' object (see Details). \code{mylik} is the basic selection criterion (usually log likelihood), \code{vec01} is the model binary (logical or numeric) indicating which regressors are included - cf. \code{\link{topmod}} }
     \item{\code{lik}:}{the function \code{lik()} returns a numeric vector of the best models (log) likelihoods, in decreasing order}
     \item{\code{bool}:}{the function \code{bool()} returns a character vector of hexmode expressions for the model binaries (cf. \code{\link{bin2hex}}), sorted by \code{lik()}  }
@@ -30,6 +32,7 @@ In addition, there is the possibility to save (the first moments of) coefficient
     \item{\code{betas}:}{ the function \code{betas()} returns a matrix whose columns are the cofficents conforming to \code{bool_binary()} (Note that these include zero coefficents due to non-inclusion of covariates); Note: may be an empty matrix }
     \item{\code{betas2}:}{ the function \code{betas2()} returns a matrix similar to \code{betas()}, but with the coeffficents second moments (Note: can be empty)  }
     \item{\code{fixed_vector}:}{the function \code{fixed_vector()} returns a matrix whose columns bear the \code{fixed_vector} statistics conforming to \code{lik()} (see Details); Note: if \code{lengthfixedvec=0} in \link{topmod} this returns an empty matrix }
+    }}
   }
 }
 \section{Methods}{

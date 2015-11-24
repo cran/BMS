@@ -1,6 +1,8 @@
 info.bma <-
-function (bmao) 
+function (object, ...) 
 {
+    bmao = object
+    rm(object)
     foo = bmao$info
     iter = foo$iter
     burn = foo$burn

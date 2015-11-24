@@ -1,6 +1,8 @@
 `[.topmod` <-
-function (tm, idx) 
+function (x, i, ...) 
 {
+    tm = x
+    idx = i
     if (any(is.na(suppressWarnings(as.integer(idx))))) 
         idx = 1:length(tm$lik())
     if (length(tm$betas_raw()) > 1) {

@@ -1,14 +1,29 @@
 bms <-
-function (X.data, burn = 1000, iter = NA, nmodel = 500, mcmc = "bd", 
-    g = "UIP", mprior = "random", mprior.size = NA, user.int = TRUE, 
-    start.value = NA, g.stats = TRUE, logfile = FALSE, logstep = 10000, 
-    force.full.ols = FALSE, fixed.reg = numeric(0)) 
+function (X.data = NULL, burn = 1000, iter = NA, nmodel = 500, 
+    mcmc = "bd", g = "UIP", mprior = "random", mprior.size = NA, 
+    user.int = TRUE, start.value = NA, g.stats = TRUE, logfile = FALSE, 
+    logstep = 10000, force.full.ols = FALSE, fixed.reg = numeric(0), 
+    data = NULL, randomizeTimer = TRUE) 
 {
-    if (class(X.data)[[1]] == "formula") {
-        X.data = stats::model.frame(X.data)
-        if (!is.null(ncol(X.data[[2]]))) 
-            X.data = cbind(X.data[[1]], X.data[[2]][, -1])
+    if (missing(X.data) & !missing(data)) 
+        X.data = data
+    mf <- match.call(expand.dots = FALSE)
+    if (!is.na(match("X.data", names(mf)))) 
+        names(mf)[[match("X.data", names(mf))]] = "formula"
+    m <- match(c("formula", "data"), names(mf), 0L)
+    mf <- mf[c(1L, m)]
+    mf$drop.unused.levels <- TRUE
+    mf[[1L]] <- as.name("model.frame")
+    if (is.data.frame(X.data)) {
+        mf <- X.data
     }
+    else if (is.matrix(X.data)) {
+        mf <- model.frame(as.data.frame(X.data, drop.unused.levels = TRUE))
+    }
+    else {
+        mf <- eval(mf, parent.frame())
+    }
+    X.data = as.matrix(mf)
     if (any(is.na(X.data))) {
         X.data = na.omit(X.data)
         if (nrow(X.data) < 3) {
@@ -83,7 +98,7 @@ function (X.data, burn = 1000, iter = NA, nmodel = 500, mcmc = "bd",
             sfilename = logfile
         }
         else {
-            sfilename = "test.log"
+            sfilename = ""
         }
         if (nchar(sfilename) > 0) 
             file.create(sfilename)
@@ -252,7 +267,8 @@ function (X.data, burn = 1000, iter = NA, nmodel = 500, mcmc = "bd",
     }
     if (!is.finite(pmpold)) 
         pmpold = -1e+90
-    set.seed(as.numeric(Sys.time()))
+    if (randomizeTimer) 
+        set.seed(as.numeric(Sys.time()))
     t1 <- Sys.time()
     nrep = burn + iter
     i = 0
@@ -260,7 +276,9 @@ function (X.data, burn = 1000, iter = NA, nmodel = 500, mcmc = "bd",
         i = i + 1
         if (logfile) {
             if (i%%fact == 0) {
-                cat(as.character(Sys.time()), ":", i, "current draw \n", 
+                if (nchar(sfilename) == 0) 
+                  message(as.character(Sys.time()), ":", i, "current draw")
+                else cat(as.character(Sys.time()), ":", i, "current draw \n", 
                   append = TRUE, file = sfilename)
             }
         }

@@ -11,13 +11,12 @@
  \method{summary}{bma}(object,...)
 
 ## or
-info.bma(bmao)
+info.bma(object,...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{object}{ a list/object of class 'bma' that typically results from the function \code{bms} (see \code{\link{bms}} for details) }
   \item{\dots}{further arguments passed to or from other methods}
-  \item{bmao}{ same as \code{object} }
 }
 \details{
   \code{info.bma} is equivalent to \code{summary.bma}, its argument \code{bmao} conforms to the argument \code{object}

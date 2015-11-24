@@ -1,6 +1,6 @@
 `[.bma` <-
-function (bmao, idx) 
+function (x, i, ...) 
 {
-    bmao$topmod <- bmao$topmod[idx]
-    return(bmao)
+    x$topmod <- x$topmod[i]
+    return(x)
 }
