@@ -1,12 +1,12 @@
 \documentclass[a4paper]{article}
 \title{Bayesian Model Averaging with BMS\\ 
-\normalsize{for BMS Version 0.3.4}}
-\author{Stefan Zeugner}
+\normalsize{for BMS Version 0.3.5}}
+\author{Martin Feldkircher and Stefan Zeugner}
 \usepackage{natbib}
 \usepackage{vmargin}
+\begin{document}
 \setpapersize{A4}
 % \VignetteIndexEntry{Bayesian Model Averaging with BMS}
-\begin{document}
 \maketitle
 \abstract{This manual is a brief introduction to applied Bayesian Model Averaging with the R package \verb+BMS+. The manual is structured as a hands-on tutorial for readers with few experience with BMA. Readers from a more technical background are advised to consult the table of contents for formal representations of the concepts used in BMS.\\
 For other tutorials and more information, please refer to \mbox{ \texttt{http://bms.zeugner.eu}.} }
@@ -18,7 +18,7 @@ options(width=75)
 @
 
 \section{A Brief Introduction to Bayesian Model Averaging}
-This section reiterates some basic concepts, and introduces some notation for readers with limited knowledge of BMA. Readers with more experience in BMA should skip this chapter and directly go to section \ref{sec:example}. For a more thorough introduction to BMA, consult \citet{Hoetingetal99}.
+This section reiterates some basic concepts, and introduces some notation for readers with limited knowledge of BMA. Readers with more experience in BMA should skip this chapter and directly go to section \ref{sec:example}. For a more thorough introduction to BMA, consult \citet{Hoetingetal99}. Note that a version this vignette has been published as \citet{fz15}. If needed, please cite from the latter reference.
 \subsection{Bayesian Model Averaging}
 Bayesian Model Averaging (BMA) addresses model uncertainty in a canonical regression problem. Suppose a linear model structure, with $y$ being the dependent variable, $\alpha_\gamma$ a constant, $\beta_\gamma$ the coefficients, and $\varepsilon$ a normal IID error term with variance $\sigma^2$:
 \begin{equation}
@@ -196,9 +196,12 @@ The quality of an MCMC approximation to the actual posterior distribution depend
 In one of the most prominent applications of BMA, \citet{fls:ccg} analyze the importance of 41 explanatory variables on long-term term economic growth in 72 countries by the means of BMA. The data set is built into BMS, a short description is available via \verb+help(datafls)+. They employ a uniform model prior and the birth-death MCMC sampler. Their $g$ prior is set to $g=\max(N,K^2)$, a mechanism such that PMPs asymptotically either behave like the Bayesian information criterion (with $g=N$) or the risk inflation criterion ($g=K^2$) -- in \verb+bms+ this prior is assigned via the argument \verb+g="BRIC"+. 
 
 Moreover \citet{fls:ccg} employ more than 200 million number of iterations after a substantial number of burn-ins. Since this would take quite a time, the following example reenacts their setting with only 50,000 burn-ins and 100,000 draws and will take about 30 seconds on a modern PC:
-<<>>=
+<<echo=TRUE,eval=FALSE>>=
 data(datafls)
 fls1 = bms(datafls, burn=50000, iter=100000, g="BRIC", mprior="uniform", nmodel=2000, mcmc="bd", user.int=F)
+@
+<<echo=FALSE>>=
+fls1 = BMS:::.flsresultlist('fls1')
 @
 Before looking at the coefficients, check convergence by invoking the \verb+summary+ command:\label{sumfls1}\footnote{Since MCMC sampling chains are never completely equal, the results presented here might differ from what you get on your machine.}
 <<>>=
@@ -244,10 +247,16 @@ Whether to prefer analytical or MCMC results is a matter of taste -- however the
 The MCMC samplers described in section \ref{ssec:mcmc} need to discard the first batch of draws (the burn-ins) since they start out from some peculiar start model and may reach the altitudes of 'high' PMPs only after many iterations. Here, choosing an appropriate start model may help to speed up convergence. By default \verb+bms+ selects its start model as follows: from the full model\footnote{actually, a model with randomly drawn $\min(K,N-3)$ variables}, all covariates with OLS t-statistics $>0.2$ are kept and included in the start model. Other start models may be assigned outright or chosen according to a similar mechanism (cf. argument \verb+start.value+ in \verb+help(bms)+). 
 
 However, in order to improve the sampler's convergence to the PMP distribution, one might actually start from several different start models. This could by particularly helpful if the models with high PMPs are clustered in distant 'regions'. For instance, one could set up the \citet{fls:ccg} example above to get iteration chains from different starting values and combine them subsequently. Start e.g. a shorter chain from the null model (the model containing just an intercept), and use the 'reversible jump' MCMC sampler:
-<<>>=
+<<echo=FALSE>>=
+fls2 = BMS:::.flsresultlist('fls2')
+@
+<<echo=TRUE,eval=FALSE>>=
 fls2= bms(datafls, burn=20000, iter=50000, g="BRIC", mprior="uniform", mcmc="rev.jump", start.value=0, user.int=F)
+@
+<<echo=TRUE>>=
 summary(fls2)
 @
+
 With \Sexpr{round(cor(pmp.bma(fls2))[2,1],2)}, the correlation between analytical and MCMC PMPs is a bit smaller than the \Sexpr{round(cor(pmp.bma(fls1))[2,1],2)} from the \verb+fls1+ example in section \ref{ssec:anavsmcmc}. However, the results of this sampling run may be combined to yield more iterations and thus a better representation of the PMP distribution.
 <<>>=
 fls_combi = c(fls1,fls2)
@@ -264,8 +273,14 @@ Virtually all BMA applications rely on the presented framework with Zellner's $g
 While some popular default elicitation mechanisms for the $g$ prior (we have seen UIP and BRIC) are quite popular, they are also subject to severe criticism. Some (e.g \citealt{fls:bmp}) advocate a comparatively large $g$ prior to minimize prior impact on the results, stay close to OLS coefficients, and represent the absolute lack of prior knowledge. Others (e.g. \citealt{cic08}) demonstrate that such a large $g$ may not be robust to noise innovations and risks over-fitting -- in particular if the the noise component plays a substantial role in the data. Again others \citep{eichi07} advocate intermediate fixed values for the $g$ priors or present alternative default specifications \citep{liang:mgp}.\footnote{Note however, that $g$ should in general be monotonously increasing in $N$: \citet{fls:bmp} prove that this sufficient for 'consistency', i.e. if there is one single linear model as in equation (\ref{eq:lm}), than its PMP asymptotically reaches 100\% as sample size $N \rightarrow \infty$.}
 
 In BMS, any fixed $g$-prior may be specified directly by submitting its value to the \verb+bms+ function argument \verb+g+. For instance, compare the results for the \citet{fls:ccg} setting when a more conservative prior such as $g=5$ is employed (and far too few iterations are performed): 
-<<>>=
+
+<<echo=FALSE>>=
+fls_g5 = BMS:::.flsresultlist('fls_g5')
+@
+<<echo=TRUE,eval=FALSE>>=
 fls_g5 = bms(datafls, burn=20000, iter=50000, g=5, mprior="uniform", user.int=F)
+@
+<<echo=TRUE,eval=TRUE>>=
 coef(fls_g5)[1:5,]
 summary(fls_g5)
 @
@@ -282,8 +297,13 @@ Eliciting a fixed $g$-prior common to all models can be fraught with difficultie
 Both model-specific $g$ priors adapt to the data: The better the signal-to-noise ratio, the closer the (expected) posterior shrinkage factor will be to one, and vice versa. Therefore average statistics on the shrinkage factor offer the interpretation as a 'goodness-of-fit' indicator (\citet{fz:superM} show that both EBL and hyper-$g$ can be interpreted in terms of the OLS F-statistic).
 
 Consider, for instance, the \citet{fls:ccg} example under an Empirical Bayes prior:
-<<>>=
+<<echo=FALSE>>=
+fls_ebl = BMS:::.flsresultlist('fls_ebl')
+@
+<<echo=TRUE,eval=FALSE>>=
 fls_ebl = bms(datafls, burn=20000, iter=50000, g="EBL", mprior="uniform", nmodel=1000, user.int=F)
+@
+<<>>=
 summary(fls_ebl)
 @
 The result \verb+Shrinkage-Stats+ reports a posterior average EBL shrinkage factor of \Sexpr{round(as.numeric(strsplit(summary(fls_ebl)[13],"=")[[1]][[2]]),3)}, which corresponds to a shrinkage factor $\frac{g}{1+g}$ under  $g\approx $ \Sexpr{round(1/(1-as.numeric(strsplit(summary(fls_ebl)[13],"=")[[1]][[2]]))-1,-0)}. Consequently, posterior model size is considerably larger than under \verb+fls_combi+, and the sampler has had a harder time to converge, as evidenced in a quite low \verb+Corr PMP+. Both conclusions can also be drawn from performing the \verb+plot(fls_ebl)+ command that combines the \verb+plotModelsize+ and \verb+plotConv+ functions:
@@ -295,8 +315,15 @@ The upper chart shows that posterior model size distribution remains very close 
 
 
 The above results show that using a flexible and model-specific prior on \citet{fls:ccg} data results in rather small posterior estimates of $\frac{g}{1+g}$, thus indicating that the \verb+g="BRIC"+ prior used in \verb+fls_combi+ may be set too far from zero. This interacts with the uniform model prior to concentrate posterior model mass on quite large models. However, imposing a uniform model prior means to expect a model size of $K/2=20.5$, which may seem overblown. Instead, try to impose smaller model size through a corresponding model prior -- e.g. impose a prior model size of 7 as in \citet{bace04}. This can be combined with a hyper-$g$ prior, where the argument \verb+g="hyper=UIP"+ imposes an $a$ parameter such that the prior expected value of $g$ corresponds to the unit information prior ($g=N$).\footnote{This is the default hyper-g prior and may therefore be as well obtained with \texttt{g=\textquotedbl hyper \textquotedbl}. }
-<<>>=
+
+
+<<echo=FALSE,eval=TRUE>>=
+fls_hyper = BMS:::.flsresultlist('fls_hyper')
+@
+<<echo=TRUE,eval=FALSE>>=
 fls_hyper = bms(datafls, burn=20000, iter=50000, g="hyper=UIP", mprior="random", mprior.size=7, nmodel=1000, user.int=F)
+@
+<<echo=TRUE,eval=TRUE>>=
 summary(fls_hyper)
 @
 
@@ -333,7 +360,7 @@ dmuslim=density(fls_hyper,reg="Muslim",addons="Eebl")
 
 Here, the \verb+addons+ argument assigns the vertical bars to be drawn: the expected conditional coefficient from MCMC (\verb+E+) results should be indicated in contrast to the expected coefficient based on analytical PMPs (\verb+e+). In addition the expected coefficients under the individual models are plotted (\verb+b+) and a legend is included (\verb+l+). The density seems more symmetric than before and the analytical results seem to be only just smaller than what could be expected from MCMC results. 
 
-Nonetheless, even though \verb+fls_hyper+ and \verb+fls_combi+ applied very different $g$ and model priors, the results for the \verb+Muslim+ covariate are broadly similar: It is unanimously positive, with a conditional expected value somewhat above $0.01$. In fact 95\% of the posterior coefficient mass seems to be concentrated between \Sexpr{round(quantile.coef.density(dmuslim,.025),3)} and \Sexpr{round(quantile.coef.density(dmuslim,.975),3)}:
+Nonetheless, even though \verb+fls_hyper+ and \verb+fls_combi+ applied very different $g$ and model priors, the results for the \verb+Muslim+ covariate are broadly similar: It is unanimously positive, with a conditional expected value somewhat above $0.01$. In fact 95\% of the posterior coefficient mass seems to be concentrated between \Sexpr{round(BMS:::quantile.coef.density(dmuslim,.025),3)} and \Sexpr{round(BMS:::quantile.coef.density(dmuslim,.975),3)}:
 <<>>=
 quantile(dmuslim, c(0.025, 0.975))
 @
